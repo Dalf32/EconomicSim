@@ -1,0 +1,387 @@
+{
+	"Agents": [
+		{
+			"Name": "Farmer",
+            "Conditions": [
+                {
+                    "ID": 1,
+                    "Type": "HasCommodity",
+                    "Commodity": "Wood"
+                },
+                {
+                    "ID": 2,
+                    "Type": "HasCommodity",
+                    "Commodity": "Tools"
+                },
+                {
+                    "ID": 3,
+                    "Type": "Chance",
+                    "Chance": 0.1
+                }
+            ],
+			"Productions": [
+                {
+                    "Commodity": "Wood",
+                    "Amount": -1,
+                    "Conditions": [1]
+                },
+				{
+					"Commodity": "Wheat",
+					"Amount": 2,
+                    "Conditions": [1]
+				},
+				{
+					"Commodity": "Wheat",
+					"Amount": 2,
+					"Conditions": [1, 2]
+				},
+				{
+					"Commodity": "Tools",
+					"Amount": -1,
+					"Conditions": [1, 2, 3]
+				}
+			],
+			"Commodities": [
+				{
+					"Name": "Wheat",
+					"Buys?": false,
+					"Sells?": true,
+					"Ideal Stock": 140
+				},
+				{
+					"Name": "Wood",
+					"Buys?": true,
+					"Sells?": false,
+					"Ideal Stock": 40
+				},
+				{
+					"Name": "Ore",
+					"Buys?": false,
+					"Sells?": false,
+					"Ideal Stock": 0
+				},
+				{
+					"Name": "Metal",
+					"Buys?": false,
+					"Sells?": false,
+					"Ideal Stock": 0
+				},
+				{
+					"Name": "Tools",
+					"Buys?": true,
+					"Sells?": false,
+					"Ideal Stock": 5
+				}
+			]
+		},
+		{
+			"Name": "Miner",
+            "Conditions": [
+                {
+                    "ID": 1,
+                    "Type": "HasCommodity",
+                    "Commodity": "Wheat"
+                },
+                {
+                    "ID": 2,
+                    "Type": "HasCommodity",
+                    "Commodity": "Tools"
+                },
+                {
+                    "ID": 3,
+                    "Type": "Chance",
+                    "Chance": 0.1
+                }
+            ],
+            "Productions": [
+                {
+                    "Commodity": "Wheat",
+                    "Amount": -1,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Ore",
+                    "Amount": 2,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Ore",
+                    "Amount": 2,
+                    "Conditions": [1, 2]
+                },
+                {
+                    "Commodity": "Tools",
+                    "Amount": -1,
+                    "Conditions": [1, 2, 3]
+                }
+            ],
+            "Commodities": [
+                {
+                    "Name": "Wheat",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 40
+                },
+                {
+                    "Name": "Wood",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Ore",
+                    "Buys?": false,
+                    "Sells?": true,
+                    "Ideal Stock": 140
+                },
+                {
+                    "Name": "Metal",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Tools",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 5
+                }
+            ]
+		},
+		{
+			"Name": "Refiner",
+            "Conditions": [
+                {
+                    "ID": 1,
+                    "Type": "HasCommodity",
+                    "Commodity": "Wheat"
+                },
+                {
+                    "ID": 2,
+                    "Type": "HasCommodity",
+                    "Commodity": "Tools"
+                },
+                {
+                    "ID": 3,
+                    "Type": "Chance",
+                    "Chance": 0.1
+                }
+            ],
+            "Variables": [
+                {
+                    "ID": 1,
+                    "Type": "CommodityQuantity",
+                    "Commodity": "Ore"
+                },
+                {
+                    "ID": 2,
+                    "Type": "NegateVariable",
+                    "Variable": 1
+                }
+            ],
+            "Productions": [
+                {
+                    "Commodity": "Wheat",
+                    "Amount": -1,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Metal",
+                    "Amount": "Variable",
+                    "Variable": 1,
+                    "Conditions": [1, 2]
+                },
+                {
+                    "Commodity": "Ore",
+                    "Amount": "Variable",
+                    "Variable": 2,
+                    "Conditions": [1, 2]
+                },
+                {
+                    "Commodity": "Tools",
+                    "Amount": -1,
+                    "Conditions": [1, 2, 3]
+                }
+            ],
+            "Commodities": [
+                {
+                    "Name": "Wheat",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 40
+                },
+                {
+                    "Name": "Wood",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Ore",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 70
+                },
+                {
+                    "Name": "Metal",
+                    "Buys?": false,
+                    "Sells?": true,
+                    "Ideal Stock": 70
+                },
+                {
+                    "Name": "Tools",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 5
+                }
+            ]
+		},
+		{
+			"Name": "Blacksmith",
+            "Conditions": [
+                {
+                    "ID": 1,
+                    "Type": "HasCommodity",
+                    "Commodity": "Wheat"
+                }
+            ],
+            "Variables": [
+                {
+                    "ID": 1,
+                    "Type": "CommodityQuantity",
+                    "Commodity": "Metal"
+                },
+                {
+                    "ID": 2,
+                    "Type": "NegateVariable",
+                    "Variable": 1
+                }
+            ],
+            "Productions": [
+                {
+                    "Commodity": "Wheat",
+                    "Amount": -1,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Tools",
+                    "Amount": "Variable",
+                    "Variable": 1,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Metal",
+                    "Amount": "Variable",
+                    "Variable": 2,
+                    "Conditions": [1]
+                }
+            ],
+            "Commodities": [
+                {
+                    "Name": "Wheat",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 40
+                },
+                {
+                    "Name": "Wood",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Ore",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Metal",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 70
+                },
+                {
+                    "Name": "Tools",
+                    "Buys?": false,
+                    "Sells?": true,
+                    "Ideal Stock": 70
+                }
+            ]
+		},
+		{
+			"Name": "Woodcutter",
+            "Conditions": [
+                {
+                    "ID": 1,
+                    "Type": "HasCommodity",
+                    "Commodity": "Wheat"
+                },
+                {
+                    "ID": 2,
+                    "Type": "HasCommodity",
+                    "Commodity": "Tools"
+                },
+                {
+                    "ID": 3,
+                    "Type": "Chance",
+                    "Chance": 0.1
+                }
+            ],
+            "Productions": [
+                {
+                    "Commodity": "Wheat",
+                    "Amount": -1,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Wood",
+                    "Amount": 1,
+                    "Conditions": [1]
+                },
+                {
+                    "Commodity": "Wood",
+                    "Amount": 1,
+                    "Conditions": [1, 2]
+                },
+                {
+                    "Commodity": "Tools",
+                    "Amount": -1,
+                    "Conditions": [1, 2, 3]
+                }
+            ],
+            "Commodities": [
+                {
+                    "Name": "Wheat",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 40
+                },
+                {
+                    "Name": "Wood",
+                    "Buys?": false,
+                    "Sells?": true,
+                    "Ideal Stock": 140
+                },
+                {
+                    "Name": "Ore",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Metal",
+                    "Buys?": false,
+                    "Sells?": false,
+                    "Ideal Stock": 0
+                },
+                {
+                    "Name": "Tools",
+                    "Buys?": true,
+                    "Sells?": false,
+                    "Ideal Stock": 5
+                }
+            ]
+		}
+	]
+}

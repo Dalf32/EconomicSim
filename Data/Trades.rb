@@ -1,0 +1,67 @@
+#Trades.rb
+
+class Bid
+  attr_reader :buyer, :bid_price, :desired_amount, :bought_amount
+
+  def initialize(buyer, price, amount)
+    @buyer = buyer
+    @bid_price = price
+    @desired_amount = amount
+    @bought_amount = 0
+  end
+
+  def amount_remaining
+    @desired_amount - @bought_amount
+  end
+
+  def fulfilled?
+    amount_remaining == 0
+  end
+
+  def buy(amount)
+    if amount_remaining >= amount
+      @bought_amount += amount
+    end
+  end
+end
+
+class Ask
+  attr_reader :seller, :ask_price, :offered_amount, :sold_amount
+
+  def initialize(seller, price, amount)
+    @seller = seller
+    @ask_price = price
+    @offered_amount = amount
+    @sold_amount = 0
+  end
+
+  def amount_remaining
+    @offered_amount - @sold_amount
+  end
+
+  def fulfilled?
+    amount_remaining == 0
+  end
+
+  def sell(amount)
+    if amount_remaining >= amount
+      @sold_amount += amount
+    end
+  end
+end
+
+class ClearedTrade
+  attr_reader :buyer_type, :seller_type, :commodity, :quantity, :price
+
+  def initialize(buyer_type, seller_type, commodity, quantity_traded, clearing_price)
+    @buyer_type = buyer_type
+    @seller_type = seller_type
+    @commodity = commodity
+    @quantity = quantity_traded
+    @price = clearing_price
+  end
+
+  def total_cost
+    @quantity * @price
+  end
+end
