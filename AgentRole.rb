@@ -76,6 +76,14 @@ class AgentRole
     sold
   end
 
+  def evaluate_condition(agent, id)
+    @conditions[id].evaluate(agent)
+  end
+
+  def evaluate_variable(agent, id)
+    @variables[id].evaluate(agent)
+  end
+
 private
 
   def evaluate_conditions(agent)

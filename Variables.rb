@@ -19,6 +19,6 @@ class NegateVariable < Variable
   end
 
   def evaluate(agent)
-    -@variable.evaluate(agent)
+    -agent.role.evaluate_variable(agent, @variable)
   end
 end

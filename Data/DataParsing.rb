@@ -97,7 +97,7 @@ class Condition
 
     case parsed_json['Type']
       when 'HasCommodity'
-        commodity = parsed_json['Commodity']
+        commodity = SimData.instance.get_commodity(parsed_json['Commodity'])
         {id => HasCommodityCondition.new(commodity)}
       when 'Chance'
         chance = parsed_json['Chance']
@@ -118,7 +118,7 @@ class Variable
 
     case parsed_json['Type']
       when 'CommodityQuantity'
-        commodity = parsed_json['Commodity']
+        commodity = SimData.instance.get_commodity(parsed_json['Commodity'])
         {id => CommodityQuantityVariable.new(commodity)}
       when 'NegateVariable'
         variable_id = parsed_json['Variable']
@@ -135,7 +135,7 @@ class ProductionRule
   end
 
   def self.from_json(parsed_json)
-    commodity = parsed_json['Commodity']
+    commodity = SimData.instance.get_commodity(parsed_json['Commodity'])
     condition_ids = parsed_json['Conditions']
 
     case parsed_json['Amount']
