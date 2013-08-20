@@ -26,6 +26,11 @@ class Commodities
 end
 
 #MAIN
+if ARGV.empty?
+  puts 'Usage: Sim.rb <Params_file.json>'
+  exit
+end
+
 params_file = ARGF.filename
 params = DataParser.parse_params(params_file)
 
