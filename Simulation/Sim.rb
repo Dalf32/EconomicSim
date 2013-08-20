@@ -26,20 +26,22 @@ class Commodities
 end
 
 #MAIN
-rounds = 100
-num_agents = 1000
+params_file = ARGF.filename
+params = DataParser.parse_params(params_file)
 
-resource_json = ''
+resources = params['Resources']
+num_rounds = params['NumRounds']
+num_agents = params['NumAgents']
+starting_funds = params['StartingFunds']
+max_stock = params['MaxStock']
 
-File.open('Resources/Market_Spec.json', 'r'){|fileIO|
-  resource_json = fileIO.read
+resources.each{|resource_file|
+  DataParser.parse_spec(resource_file)
 }
 
-DataParser.parse(resource_json)
-
-Inventory.max_stock = 200
+Inventory.max_stock = max_stock
 market = Market.new(Commodities.all)
-spawner = AgentSpawner.new(market, SimData.instance.agent_roles, 1000)
+spawner = AgentSpawner.new(market, SimData.instance.agent_roles, starting_funds)
 agents = spawner.spawn_agents(num_agents)
 
 #Event subscriptions
@@ -56,7 +58,7 @@ market.bid_posted_event<<CommodityTracker.instance
 
 CommodityTracker.instance.set_commodities(Commodities.all)
 
-rounds.times{|n|
+num_rounds.times{|n|
   puts "Round #{n + 1} start"
 
   agents.each{|agent|

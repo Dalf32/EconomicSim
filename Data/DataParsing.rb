@@ -10,8 +10,9 @@ require_relative '../Variables'
 require_relative '../ProductionRule'
 
 class DataParser
-  def self.parse(json)
-    parsed_json = JSON.parse(json)
+  def self.parse_spec(filename)
+    raw_json = DataParser.read_file(filename)
+    parsed_json = JSON.parse(raw_json)
 
     parsed_json.each_pair{|key, value|
       case key
@@ -27,6 +28,23 @@ class DataParser
           raise 'Illegal JSON'
       end
     }
+  end
+
+  def self.parse_params(filename)
+    raw_json = DataParser.read_file(filename)
+    JSON.parse(raw_json)['Parameters']
+  end
+
+private
+
+  def self.read_file(filename)
+    json = ''
+
+    File.open(filename, 'r'){|fileIO|
+      json = fileIO.read
+    }
+
+    json
   end
 end
 
