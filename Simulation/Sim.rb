@@ -29,23 +29,16 @@ end
 rounds = 100
 num_agents = 1000
 
-agents_json = ''
-commodities_json = ''
+resource_json = ''
 
-File.open('Resources/Commodities.json', 'r'){|fileIO|
-  commodities_json = fileIO.read
+File.open('Resources/Market_Spec.json', 'r'){|fileIO|
+  resource_json = fileIO.read
 }
 
-File.open('Resources/Agents.json', 'r'){|fileIO|
-  agents_json = fileIO.read
-}
-
-DataParser.parse(commodities_json)
-DataParser.parse(agents_json)
+DataParser.parse(resource_json)
 
 Inventory.max_stock = 200
 market = Market.new(Commodities.all)
-#spawner = AgentSpawner.new(market, [farmer, miner, refiner, woodcutter, blacksmith], 1000)
 spawner = AgentSpawner.new(market, SimData.instance.agent_roles, 1000)
 agents = spawner.spawn_agents(num_agents)
 

@@ -1,4 +1,21 @@
 {
+    "Commodities": [
+        {
+            "Name": "Wheat"
+        },
+        {
+            "Name": "Wood"
+        },
+        {
+            "Name": "Metal"
+        },
+        {
+            "Name": "Ore"
+        },
+        {
+            "Name": "Tools"
+        }
+    ],
 	"Agents": [
 		{
 			"Name": "Farmer",
