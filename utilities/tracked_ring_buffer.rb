@@ -1,6 +1,6 @@
 #TrackedRingBuffer.rb
 
-require_relative 'TrackedArray'
+require_relative 'tracked_array'
 
 class TrackedRingBuffer < TrackedArray
   attr_reader :buffer_size

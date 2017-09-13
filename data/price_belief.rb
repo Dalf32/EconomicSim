@@ -1,6 +1,6 @@
 #PriceBelief.rb
 
-require_relative '../Utilities/Extensions'
+require_relative '../utilities/extensions'
 
 class PriceBelief
   MIN_SPAN = 2.0

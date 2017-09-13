@@ -1,6 +1,6 @@
 #AgentRole.rb
 
-require_relative 'Data/Inventory'
+require_relative 'data/inventory'
 
 class AgentRole
   BUYS = 0x01

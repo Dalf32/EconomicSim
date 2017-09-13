@@ -1,4 +1,4 @@
-#Variables.rb
+#variables.rb
 
 class Variable
 end

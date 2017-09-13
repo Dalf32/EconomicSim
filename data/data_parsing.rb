@@ -2,12 +2,12 @@
 
 require 'json'
 
-require_relative 'SimData'
-require_relative 'Commodity'
-require_relative '../AgentRole'
-require_relative '../Conditions'
-require_relative '../Variables'
-require_relative '../ProductionRule'
+require_relative 'sim_data'
+require_relative 'commodity'
+require_relative '../agent_role'
+require_relative '../conditions'
+require_relative '../variables'
+require_relative '../production_rule'
 
 class DataParser
   def self.parse_spec(filename)

@@ -1,4 +1,4 @@
-#TrackedArray.rb
+#tracked_array.rb
 
 class TrackedArray < Array
   attr_reader :sum

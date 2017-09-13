@@ -1,17 +1,17 @@
 #Sim.rb
 
-require_relative 'Market'
-require_relative 'AgentSpawner'
-require_relative '../EconomicAgent'
-require_relative '../AgentRole'
-require_relative '../Conditions'
-require_relative '../Variables'
-require_relative '../ProductionRule'
-require_relative '../Data/Commodity'
-require_relative '../Data/DataParsing'
-require_relative '../Observers/TradeTracker'
-require_relative '../Observers/FileLogger'
-require_relative '../Observers/CommodityTracker'
+require_relative 'market'
+require_relative 'agent_spawner'
+require_relative '../economic_agent'
+require_relative '../agent_role'
+require_relative '../conditions'
+require_relative '../variables'
+require_relative '../production_rule'
+require_relative '../data/commodity'
+require_relative '../data/data_parsing'
+require_relative '../observers/trade_tracker'
+require_relative '../observers/file_logger'
+require_relative '../observers/commodity_tracker'
 
 class Commodities
   WHEAT = Commodity.new('Wheat')
@@ -27,7 +27,7 @@ end
 
 #MAIN
 if ARGV.empty?
-  puts 'Usage: Sim.rb <Params_file.json>'
+  puts 'Usage: sim.rb <Params_file.json>'
   exit
 end
 

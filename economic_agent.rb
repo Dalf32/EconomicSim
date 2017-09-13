@@ -1,8 +1,8 @@
 #EconomicAgent.rb
 
-require_relative 'Utilities/Extensions'
-require_relative 'Data/PriceBelief'
-require_relative 'Data/Inventory'
+require_relative 'utilities/extensions'
+require_relative 'data/price_belief'
+require_relative 'data/inventory'
 
 class EconomicAgent
   attr_reader :role, :market, :funds, :inventory

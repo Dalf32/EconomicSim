@@ -1,4 +1,4 @@
-#Inventory.rb
+#inventory.rb
 
 class Inventory
   def initialize(commodities)

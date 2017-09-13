@@ -1,6 +1,6 @@
 #AgentSpawner.rb
 
-require_relative '../Observers/TradeTracker'
+require_relative '../observers/trade_tracker'
 
 class AgentSpawner
   def initialize(market, agent_roles, *params)

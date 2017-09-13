@@ -1,4 +1,4 @@
-#Commodity.rb
+#commodity.rb
 
 class Commodity
   attr_reader :name

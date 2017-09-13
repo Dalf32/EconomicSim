@@ -1,4 +1,4 @@
-#Extensions.rb
+#extensions.rb
 
 class Array
   def sum

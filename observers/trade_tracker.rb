@@ -2,9 +2,9 @@
 
 require 'singleton'
 
-require_relative '../Data/Trades'
-require_relative '../Utilities/TrackedArray'
-require_relative '../Utilities/TrackedRingBuffer'
+require_relative '../data/trades'
+require_relative '../utilities/tracked_array'
+require_relative '../utilities/tracked_ring_buffer'
 
 class TradeTracker
   include Singleton

@@ -1,4 +1,4 @@
-#ProductionRule.rb
+#production_rule.rb
 
 class ProductionRule
   def initialize(commodity, condition_ids)

@@ -1,9 +1,9 @@
 #Market
 
-require_relative '../Data/Trades'
-require_relative '../Utilities/Extensions'
-require_relative '../Utilities/TrackedArray'
-require_relative '../Utilities/Event'
+require_relative '../data/trades'
+require_relative '../utilities/extensions'
+require_relative '../utilities/tracked_array'
+require_relative '../utilities/event'
 
 class Market
   attr_reader :commodities, :purchase_history
