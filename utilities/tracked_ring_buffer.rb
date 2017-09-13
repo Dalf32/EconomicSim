@@ -1,4 +1,4 @@
-#TrackedRingBuffer.rb
+# tracked_ring_buffer.rb
 
 require_relative 'tracked_array'
 
@@ -14,11 +14,7 @@ class TrackedRingBuffer < TrackedArray
     if size == @buffer_size
       removed = shift
 
-      if removed.class == TrackedArray
-        @sum -= removed.avg
-      else
-        @sum -= removed
-      end
+      @sum -= removed.class == TrackedArray ? removed.avg : removed
     end
 
     super

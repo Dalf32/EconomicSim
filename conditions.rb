@@ -1,4 +1,4 @@
-#conditions.rb
+# conditions.rb
 
 class Condition
 end

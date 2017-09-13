@@ -1,4 +1,4 @@
-#CommodityTracker.rb
+# commodity_tracker.rb
 
 require 'singleton'
 
@@ -9,12 +9,12 @@ class CommodityTracker
     @current_round = 0
     @commodities = nil
 
-    @supply = Hash.new{|hash, key| hash[key] = 0}
-    @demand = Hash.new{|hash, key| hash[key] = 0}
+    @supply = Hash.new { |hash, key| hash[key] = 0 }
+    @demand = Hash.new { |hash, key| hash[key] = 0 }
 
-    @all_prices = Hash.new{|hash, key| hash[key] = TrackedArray.new}
-    @max_prices = Hash.new{|hash, key| hash[key] = 0}
-    @min_prices = Hash.new{|hash, key| hash[key] = 0}
+    @all_prices = Hash.new { |hash, key| hash[key] = TrackedArray.new }
+    @max_prices = Hash.new { |hash, key| hash[key] = 0 }
+    @min_prices = Hash.new { |hash, key| hash[key] = 0 }
 
     @supply_file = File.new('logs/supply.csv', 'w')
     @demand_file = File.new('logs/demand.csv', 'w')
@@ -23,56 +23,50 @@ class CommodityTracker
     @price_variance_file = File.new('logs/price_variance.csv', 'w')
 
     @all_files = [@supply_file, @demand_file, @ratio_file, @mean_price_file,
-        @price_variance_file]
+                  @price_variance_file]
   end
 
   def set_commodities(commodities)
     @commodities = commodities
 
-    @commodities.each{|commodity|
+    @commodities.each do |commodity|
       @supply[commodity] = 0
       @demand[commodity] = 0
-    }
+    end
   end
 
   def change_round
-    if @current_round == 0
+    if @current_round.zero?
       header_str = 'Round'
 
-      @commodities.each{|commodity|
-        header_str<<",#{commodity.name}"
-      }
+      @commodities.each do |commodity|
+        header_str << ",#{commodity.name}"
+      end
 
-      header_str<<"\n"
+      header_str << "\n"
 
-      @all_files.each{|file|
-        file<<header_str
-      }
+      @all_files.each { |file| file << header_str }
     else
-      @all_files.each{|file|
-        file<<@current_round.to_s
-      }
+      @all_files.each { |file| file << @current_round.to_s }
 
-      @commodities.each{|commodity|
-        @ratio_file<<",#{@supply[commodity].to_f / @demand[commodity].to_f}"
+      @commodities.each do |commodity|
+        @ratio_file << ",#{@supply[commodity].to_f / @demand[commodity].to_f}"
 
-        @supply_file<<",#{@supply[commodity]}"
+        @supply_file << ",#{@supply[commodity]}"
         @supply[commodity] = 0
 
-        @demand_file<<",#{@demand[commodity]}"
+        @demand_file << ",#{@demand[commodity]}"
         @demand[commodity] = 0
 
-        @mean_price_file<<",#{@all_prices[commodity].avg}"
+        @mean_price_file << ",#{@all_prices[commodity].avg}"
         @all_prices[commodity] = TrackedArray.new
 
-        @price_variance_file<<",#{@max_prices[commodity] - @min_prices[commodity]}"
+        @price_variance_file << ",#{@max_prices[commodity] - @min_prices[commodity]}"
         @max_prices[commodity] = 0
         @min_prices[commodity] = 0
-      }
+      end
 
-      @all_files.each{|file|
-        file<<"\n"
-      }
+      @all_files.each { |file| file << "\n" }
     end
 
     @current_round += 1
@@ -87,7 +81,7 @@ class CommodityTracker
   end
 
   def trade_cleared(_buyer, _seller, commodity, _quantity_traded, clearing_price)
-    @all_prices[commodity]<<clearing_price
+    @all_prices[commodity] << clearing_price
     @max_prices[commodity] = clearing_price unless @max_prices[commodity] >= clearing_price
     @min_prices[commodity] = clearing_price unless @min_prices[commodity] <= clearing_price
   end

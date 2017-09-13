@@ -1,26 +1,26 @@
-#inventory.rb
+# inventory.rb
 
 class Inventory
   def initialize(commodities)
-    @commodities = Hash.new
-    @ideal_stock = Array.new
-    @stock = Array.new
-    @trade_prefs = Array.new
+    @commodities = {}
+    @ideal_stock = []
+    @stock = []
+    @trade_prefs = []
 
-    commodities.each_index{|id|
+    commodities.each_index do |id|
       @commodities[commodities[id]] = id
       @ideal_stock[id] = 0
       @stock[id] = 0
-    }
+    end
   end
 
   def clone
     inventory = Inventory.new(@commodities.keys)
 
-    @commodities.each_pair{|commodity, id|
+    @commodities.each_pair do |commodity, id|
       inventory.set_ideal_stock_of(commodity, @ideal_stock[id])
       inventory.set_stock_of(commodity, @stock[id])
-    }
+    end
 
     inventory
   end

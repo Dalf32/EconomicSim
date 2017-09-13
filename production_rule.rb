@@ -1,4 +1,4 @@
-#production_rule.rb
+# production_rule.rb
 
 class ProductionRule
   def initialize(commodity, condition_ids)
@@ -9,9 +9,7 @@ class ProductionRule
   def should_produce?(condition_vals)
     should_produce = true
 
-    @condition_ids.each{|id|
-      should_produce &= condition_vals[id]
-    }
+    @condition_ids.each { |id| should_produce &= condition_vals[id] }
 
     should_produce
   end

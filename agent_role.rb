@@ -1,4 +1,4 @@
-#AgentRole.rb
+# agent_role.rb
 
 require_relative 'data/inventory'
 
@@ -11,10 +11,10 @@ class AgentRole
   def initialize(name, commodities)
     @name = name
     @inventory = Inventory.new(commodities)
-    @conditions = Hash.new
-    @variables = Hash.new
-    @production_rules = Array.new
-    @trade_prefs = Hash.new{|hash, key| hash[key] = 0}
+    @conditions = {}
+    @variables = {}
+    @production_rules = []
+    @trade_prefs = Hash.new { |hash, key| hash[key] = 0 }
   end
 
   def new_agent(market, starting_funds)
@@ -36,16 +36,14 @@ class AgentRole
   end
 
   def add_production_rule(rule)
-    @production_rules<<rule
+    @production_rules << rule
   end
 
   def perform_production(agent)
     condition_vals = evaluate_conditions(agent)
     variable_vals = evaluate_variables(agent)
 
-    @production_rules.each{|rule|
-      rule.produce(agent, condition_vals, variable_vals)
-    }
+    @production_rules.each { |rule| rule.produce(agent, condition_vals, variable_vals) }
   end
 
   def buys?(commodity)
@@ -57,21 +55,17 @@ class AgentRole
   end
 
   def commodities_to_buy
-    bought = Array.new
+    bought = []
 
-    @trade_prefs.each_key{|commodity|
-      bought<<commodity unless !buys?(commodity)
-    }
+    @trade_prefs.each_key { |commodity| bought << commodity if buys?(commodity) }
 
     bought
   end
 
   def commodities_to_sell
-    sold = Array.new
+    sold = []
 
-    @trade_prefs.each_key{|commodity|
-      sold<<commodity unless !sells?(commodity)
-    }
+    @trade_prefs.each_key { |commodity| sold << commodity if sells?(commodity) }
 
     sold
   end
@@ -84,24 +78,20 @@ class AgentRole
     @variables[id].evaluate(agent)
   end
 
-private
+  private
 
   def evaluate_conditions(agent)
-    condition_vals = Hash.new
+    condition_vals = {}
 
-    @conditions.each_pair{|id, cond|
-      condition_vals[id] = cond.evaluate(agent)
-    }
+    @conditions.each_pair { |id, cond| condition_vals[id] = cond.evaluate(agent) }
 
     condition_vals
   end
 
   def evaluate_variables(agent)
-    variable_vals = Hash.new
+    variable_vals = {}
 
-    @variables.each_pair{|id, var|
-      variable_vals[id] = var.evaluate(agent)
-    }
+    @variables.each_pair { |id, var| variable_vals[id] = var.evaluate(agent) }
 
     variable_vals
   end

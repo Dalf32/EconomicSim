@@ -1,4 +1,4 @@
-#Event.rb
+# event.rb
 
 require 'Observer'
 
@@ -9,8 +9,8 @@ class Event
     add_observer(handler)
   end
 
-  def >>(handler)
-    delete_observer(handler)
+  def >>(other)
+    delete_observer(other)
   end
 
   def fire(*args)

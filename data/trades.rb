@@ -1,4 +1,4 @@
-#trades.rb
+# trades.rb
 
 class Bid
   attr_reader :buyer, :bid_price, :desired_amount, :bought_amount
@@ -15,13 +15,11 @@ class Bid
   end
 
   def fulfilled?
-    amount_remaining == 0
+    amount_remaining.zero?
   end
 
   def buy(amount)
-    if amount_remaining >= amount
-      @bought_amount += amount
-    end
+    @bought_amount += amount if amount_remaining >= amount
   end
 end
 
@@ -40,13 +38,11 @@ class Ask
   end
 
   def fulfilled?
-    amount_remaining == 0
+    amount_remaining.zero?
   end
 
   def sell(amount)
-    if amount_remaining >= amount
-      @sold_amount += amount
-    end
+    @sold_amount += amount if amount_remaining >= amount
   end
 end
 

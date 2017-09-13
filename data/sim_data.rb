@@ -1,4 +1,4 @@
-#SimData.rb
+# sim_data.rb
 
 require 'singleton'
 
@@ -6,8 +6,8 @@ class SimData
   include Singleton
 
   def initialize
-    @commodities = Hash.new
-    @agent_roles = Hash.new
+    @commodities = {}
+    @agent_roles = {}
   end
 
   def commodities

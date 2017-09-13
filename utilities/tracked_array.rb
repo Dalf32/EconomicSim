@@ -1,4 +1,4 @@
-#tracked_array.rb
+# tracked_array.rb
 
 class TrackedArray < Array
   attr_reader :sum
@@ -9,16 +9,12 @@ class TrackedArray < Array
   end
 
   def avg
-    return (@sum / size) unless size == 0
-    0
+    return 0 if size.zero?
+    (@sum / size)
   end
 
   def <<(value)
-    if value.class == TrackedArray
-      @sum += value.avg
-    else
-      @sum += value
-    end
+    @sum += value.class == TrackedArray ? value.avg : value
 
     super
   end

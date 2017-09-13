@@ -1,4 +1,4 @@
-#Market
+# market
 
 require_relative '../data/trades'
 require_relative '../utilities/extensions'
@@ -11,15 +11,15 @@ class Market
 
   def initialize(commodities)
     @commodities = commodities
-    @bids = Hash.new
-    @asks = Hash.new
-    @purchase_history = Hash.new
+    @bids = {}
+    @asks = {}
+    @purchase_history = {}
 
-    @commodities.each{|commodity|
-      @asks[commodity] = Array.new
-      @bids[commodity] = Array.new
+    @commodities.each do |commodity|
+      @asks[commodity] = []
+      @bids[commodity] = []
       @purchase_history[commodity] = TrackedArray.new
-    }
+    end
 
     @trade_cleared_event = Event.new
     @round_change_event = Event.new
@@ -29,12 +29,12 @@ class Market
 
   def post_ask(commodity, ask)
     @ask_posted_event.fire(commodity, ask)
-    @asks[commodity]<<ask
+    @asks[commodity] << ask
   end
 
   def post_bid(commodity, bid)
     @bid_posted_event.fire(commodity, bid)
-    @bids[commodity]<<bid
+    @bids[commodity] << bid
   end
 
   def last_price_of(commodity)
@@ -42,11 +42,9 @@ class Market
   end
 
   def mean_price_of(commodity)
-    round_avgs = Array.new
+    round_avgs = []
 
-    @purchase_history[commodity].map{|round_history|
-      round_avgs<<round_history.avg
-    }
+    @purchase_history[commodity].map { |round_history| round_avgs << round_history.avg }
 
     round_avgs.avg
   end
@@ -54,16 +52,14 @@ class Market
   def resolve_all_offers
     @round_change_event.fire
 
-    @commodities.each{|commodity|
-      resolve_offers(commodity)
-    }
+    @commodities.each { |commodity| resolve_offers(commodity) }
   end
 
   def resolve_offers(commodity)
     purchases = TrackedArray.new
 
-    @bids[commodity].shuffle.sort!{|a, b| b.bid_price <=> a.bid_price}
-    @asks[commodity].shuffle.sort!{|a, b| a.ask_price <=> b.ask_price}
+    @bids[commodity].shuffle.sort! { |a, b| b.bid_price <=> a.bid_price }
+    @asks[commodity].shuffle.sort! { |a, b| a.ask_price <=> b.ask_price }
 
     until @bids[commodity].empty? || @asks[commodity].empty?
       bid = @bids[commodity][0]
@@ -73,7 +69,7 @@ class Market
 
       if quantity_traded > 0
         @trade_cleared_event.fire(bid.buyer, ask.seller, commodity, quantity_traded, clearing_price)
-        purchases<<clearing_price
+        purchases << clearing_price
 
         ask.sell(quantity_traded)
         bid.buy(quantity_traded)
@@ -82,33 +78,28 @@ class Market
         bid.buyer.trade_results(commodity, quantity_traded, clearing_price)
       end
 
-      if ask.fulfilled?
-        @asks[commodity].shift
-      end
-
-      if bid.fulfilled?
-        @bids[commodity].shift
-      end
+      @asks[commodity].shift if ask.fulfilled?
+      @bids[commodity].shift if bid.fulfilled?
     end
 
     unless @bids[commodity].empty?
-      @bids[commodity].each{|bid|
-        #bid.buyer.bid_results(commodity, 0, 0, false)
+      @bids[commodity].each do |bid|
+        # bid.buyer.bid_results(commodity, 0, 0, false)
         bid.buyer.update_failed_trades
-      }
+      end
 
       @bids[commodity].clear
     end
 
     unless @asks[commodity].empty?
-      @asks[commodity].each{|ask|
-        #ask.seller.ask_results(commodity, 0, 0, false)
+      @asks[commodity].each do |ask|
+        # ask.seller.ask_results(commodity, 0, 0, false)
         ask.seller.update_failed_trades
-      }
+      end
 
       @asks[commodity].clear
     end
 
-    @purchase_history[commodity]<<purchases
+    @purchase_history[commodity] << purchases
   end
 end

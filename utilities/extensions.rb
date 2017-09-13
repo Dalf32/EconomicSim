@@ -1,18 +1,16 @@
-#extensions.rb
+# extensions.rb
 
 class Array
   def sum
     sum = 0
 
-    map{|x| sum += x}
+    map { |x| sum += x }
 
     sum
   end
 
   def avg
-    unless size == 0
-      sum / size
-    end
+    sum / size unless size.zero?
   end
 end
 

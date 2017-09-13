@@ -1,4 +1,4 @@
-#FileLogger.rb
+# file_logger.rb
 
 require 'singleton'
 
@@ -10,28 +10,26 @@ class FileLogger
 
     log_directory = 'logs'
     @all_trades_log = File.new("#{log_directory}/all_trades.txt", 'w')
-    @commodity_logs = Hash.new{|hash, key|
+    @commodity_logs = Hash.new do |hash, key|
       hash[key] = File.new("#{log_directory}/#{key.name}.txt", 'w')
-    }
+    end
   end
 
   def log_round_change
     round_change_str = "Round #{@current_round} start\n"
 
-    @all_trades_log<<round_change_str
-    @commodity_logs.each_value{|logfile|
-      logfile<<round_change_str
-    }
+    @all_trades_log << round_change_str
+    @commodity_logs.each_value { |logfile| logfile << round_change_str }
 
     @current_round += 1
   end
 
   def log_trade_cleared(buyer, seller, commodity, quantity_traded, clearing_price)
-    @all_trades_log<<"#{quantity_traded} #{commodity.name} at #{clearing_price.round(2)}/unit\n"
-    @all_trades_log<<"\tBuyer: #{buyer.role.name} (#{buyer.object_id})\n"
-    @all_trades_log<<"\tSeller: #{seller.role.name} (#{seller.object_id})\n"
+    @all_trades_log << "#{quantity_traded} #{commodity.name} at #{clearing_price.round(2)}/unit\n"
+    @all_trades_log << "\tBuyer: #{buyer.role.name} (#{buyer.object_id})\n"
+    @all_trades_log << "\tSeller: #{seller.role.name} (#{seller.object_id})\n"
 
-    @commodity_logs[commodity]<<"#{quantity_traded} at #{clearing_price.round(2)}/unit\n"
+    @commodity_logs[commodity] << "#{quantity_traded} at #{clearing_price.round(2)}/unit\n"
   end
 
   def update(*args)

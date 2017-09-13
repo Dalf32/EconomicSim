@@ -1,4 +1,4 @@
-#PriceBelief.rb
+# price_belief.rb
 
 require_relative '../utilities/extensions'
 
@@ -21,10 +21,10 @@ class PriceBelief
     new_max = @max - narrow_amount
     new_belief = PriceBelief.new(new_min, new_max)
 
-    unless new_belief.span < MIN_SPAN
-      @min = new_min
-      @max = new_max
-    end
+    return if new_belief.span < MIN_SPAN
+
+    @min = new_min
+    @max = new_max
   end
 
   def expand(expand_amount)
