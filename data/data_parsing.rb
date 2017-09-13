@@ -44,8 +44,6 @@ class DataParser
 
     json
   end
-
-  private_class_method :read_file
 end
 
 class Commodity
