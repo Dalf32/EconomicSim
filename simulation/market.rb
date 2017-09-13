@@ -1,4 +1,6 @@
 # market
+#
+# Author::  Kyle Mullins
 
 require_relative '../data/trades'
 require_relative '../utilities/extensions'

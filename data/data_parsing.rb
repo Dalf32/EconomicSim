@@ -1,4 +1,6 @@
 # data_parsing.rb
+#
+# Author::  Kyle Mullins
 
 require 'json'
 

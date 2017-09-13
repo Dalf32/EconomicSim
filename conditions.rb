@@ -1,4 +1,6 @@
 # conditions.rb
+#
+# Author::  Kyle Mullins
 
 class Condition
 end

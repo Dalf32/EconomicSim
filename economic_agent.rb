@@ -1,4 +1,6 @@
 # economic_agent.rb
+#
+# Author::  Kyle Mullins
 
 require_relative 'utilities/extensions'
 require_relative 'data/price_belief'

@@ -1,4 +1,6 @@
 # event.rb
+#
+# Author::  Kyle Mullins
 
 require 'Observer'
 

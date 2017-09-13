@@ -1,4 +1,6 @@
 # extensions.rb
+#
+# Author::  Kyle Mullins
 
 class Array
   def sum

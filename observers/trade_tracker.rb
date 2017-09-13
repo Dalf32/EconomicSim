@@ -1,4 +1,6 @@
 # trade_tracker.rb
+#
+# Author::  Kyle Mullins
 
 require 'singleton'
 

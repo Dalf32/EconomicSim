@@ -1,4 +1,6 @@
 # sim_data.rb
+#
+# Author::  Kyle Mullins
 
 require 'singleton'
 

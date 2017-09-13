@@ -1,4 +1,6 @@
 # agent_spawner.rb
+#
+# Author::  Kyle Mullins
 
 require_relative '../observers/trade_tracker'
 

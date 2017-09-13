@@ -1,4 +1,6 @@
 # commodity.rb
+#
+# Author::  Kyle Mullins
 
 class Commodity
   attr_reader :name

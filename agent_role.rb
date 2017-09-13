@@ -1,4 +1,6 @@
 # agent_role.rb
+#
+# Author::  Kyle Mullins
 
 require_relative 'data/inventory'
 

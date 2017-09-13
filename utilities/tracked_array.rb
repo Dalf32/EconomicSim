@@ -1,4 +1,6 @@
 # tracked_array.rb
+#
+# Author::  Kyle Mullins
 
 class TrackedArray < Array
   attr_reader :sum

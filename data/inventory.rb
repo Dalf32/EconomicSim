@@ -1,4 +1,6 @@
 # inventory.rb
+#
+# Author::  Kyle Mullins
 
 class Inventory
   def initialize(commodities)

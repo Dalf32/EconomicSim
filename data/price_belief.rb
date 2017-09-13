@@ -1,4 +1,6 @@
 # price_belief.rb
+#
+# Author::  Kyle Mullins
 
 require_relative '../utilities/extensions'
 

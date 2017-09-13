@@ -1,4 +1,6 @@
 # sim.rb
+#
+# Author::  Kyle Mullins
 
 require_relative 'market'
 require_relative 'agent_spawner'

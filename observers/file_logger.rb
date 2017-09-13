@@ -1,4 +1,6 @@
 # file_logger.rb
+#
+# Author::  Kyle Mullins
 
 require 'singleton'
 

@@ -1,4 +1,6 @@
 # production_rule.rb
+#
+# Author::  Kyle Mullins
 
 class ProductionRule
   def initialize(commodity, condition_ids)

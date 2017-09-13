@@ -1,4 +1,6 @@
 # trades.rb
+#
+# Author::  Kyle Mullins
 
 class Bid
   attr_reader :buyer, :bid_price, :desired_amount, :bought_amount

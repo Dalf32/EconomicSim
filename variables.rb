@@ -1,4 +1,6 @@
 # variables.rb
+#
+# Author::  Kyle Mullins
 
 class Variable
 end

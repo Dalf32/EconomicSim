@@ -1,4 +1,6 @@
 # tracked_ring_buffer.rb
+#
+# Author::  Kyle Mullins
 
 require_relative 'tracked_array'
 
