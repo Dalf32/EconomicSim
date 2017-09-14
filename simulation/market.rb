@@ -1,18 +1,20 @@
-# market
+# market.rb
 #
 # Author::  Kyle Mullins
 
 require_relative '../data/trades'
 require_relative '../utilities/extensions'
 require_relative '../utilities/tracked_array'
-require_relative '../utilities/event'
+require_relative '../events/event_reactor'
+require_relative '../events/events'
 
 class Market
   attr_reader :commodities, :purchase_history
-  attr_reader :trade_cleared_event, :round_change_event, :ask_posted_event, :bid_posted_event
 
-  def initialize(commodities)
+  def initialize(commodities, trade_tracker)
     @commodities = commodities
+    @trade_tracker = trade_tracker
+
     @bids = {}
     @asks = {}
     @purchase_history = {}
@@ -22,25 +24,20 @@ class Market
       @bids[commodity] = []
       @purchase_history[commodity] = TrackedArray.new
     end
-
-    @trade_cleared_event = Event.new
-    @round_change_event = Event.new
-    @ask_posted_event = Event.new
-    @bid_posted_event = Event.new
   end
 
   def post_ask(commodity, ask)
-    @ask_posted_event.fire(commodity, ask)
+    EventReactor.instance.publish(AskPostedEvent.new(commodity, ask))
     @asks[commodity] << ask
   end
 
   def post_bid(commodity, bid)
-    @bid_posted_event.fire(commodity, bid)
+    EventReactor.instance.publish(BidPostedEvent.new(commodity, bid))
     @bids[commodity] << bid
   end
 
   def last_price_of(commodity)
-    TradeTracker.instance.price_of(commodity)
+    @trade_tracker.price_of(commodity)
   end
 
   def mean_price_of(commodity)
@@ -52,7 +49,7 @@ class Market
   end
 
   def resolve_all_offers
-    @round_change_event.fire
+    EventReactor.instance.publish(RoundChangeEvent.new)
 
     @commodities.each { |commodity| resolve_offers(commodity) }
   end
@@ -70,7 +67,10 @@ class Market
       clearing_price = Math.avg(ask.ask_price, bid.bid_price)
 
       if quantity_traded > 0
-        @trade_cleared_event.fire(bid.buyer, ask.seller, commodity, quantity_traded, clearing_price)
+        cleared_trade = ClearedTrade.new(bid.buyer, ask.seller, commodity,
+                                         quantity_traded, clearing_price)
+        EventReactor.instance.publish(TradeClearedEvent.new(cleared_trade))
+
         purchases << clearing_price
 
         ask.sell(quantity_traded)

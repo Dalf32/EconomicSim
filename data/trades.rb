@@ -49,11 +49,11 @@ class Ask
 end
 
 class ClearedTrade
-  attr_reader :buyer_type, :seller_type, :commodity, :quantity, :price
+  attr_reader :buyer, :seller, :commodity, :quantity, :price
 
-  def initialize(buyer_type, seller_type, commodity, quantity_traded, clearing_price)
-    @buyer_type = buyer_type
-    @seller_type = seller_type
+  def initialize(buyer, seller, commodity, quantity_traded, clearing_price)
+    @buyer = buyer
+    @seller = seller
     @commodity = commodity
     @quantity = quantity_traded
     @price = clearing_price

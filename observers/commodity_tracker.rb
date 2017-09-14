@@ -2,11 +2,11 @@
 #
 # Author::  Kyle Mullins
 
-require 'singleton'
+require_relative '../data/trades'
+require_relative '../utilities/tracked_array'
+require_relative '../events/event_reactor'
 
 class CommodityTracker
-  include Singleton
-
   def initialize
     @current_round = 0
     @commodities = nil
@@ -26,6 +26,11 @@ class CommodityTracker
 
     @all_files = [@supply_file, @demand_file, @ratio_file, @mean_price_file,
                   @price_variance_file]
+
+    EventReactor.instance.subscribe(:trade_cleared, &method(:trade_cleared))
+    EventReactor.instance.subscribe(:round_change, &method(:change_round))
+    EventReactor.instance.subscribe(:ask_posted, &method(:ask_posted))
+    EventReactor.instance.subscribe(:bid_posted, &method(:bid_posted))
   end
 
   def set_commodities(commodities)
@@ -37,7 +42,7 @@ class CommodityTracker
     end
   end
 
-  def change_round
+  def change_round(_event)
     if @current_round.zero?
       header_str = 'Round'
 
@@ -74,18 +79,19 @@ class CommodityTracker
     @current_round += 1
   end
 
-  def ask_posted(commodity, ask)
-    @supply[commodity] += ask.offered_amount
+  def ask_posted(event)
+    @supply[event.commodity] += event.ask.offered_amount
   end
 
-  def bid_posted(commodity, bid)
-    @demand[commodity] += bid.desired_amount
+  def bid_posted(event)
+    @demand[event.commodity] += event.bid.desired_amount
   end
 
-  def trade_cleared(_buyer, _seller, commodity, _quantity_traded, clearing_price)
-    @all_prices[commodity] << clearing_price
-    @max_prices[commodity] = clearing_price unless @max_prices[commodity] >= clearing_price
-    @min_prices[commodity] = clearing_price unless @min_prices[commodity] <= clearing_price
+  def trade_cleared(event)
+    trade = event.cleared_trade
+    @all_prices[trade.commodity] << trade.price
+    @max_prices[trade.commodity] = trade.price unless @max_prices[trade.commodity] >= trade.price
+    @min_prices[trade.commodity] = trade.price unless @min_prices[trade.commodity] <= trade.price
   end
 
   def update(*args)

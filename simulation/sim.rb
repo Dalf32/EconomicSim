@@ -11,6 +11,7 @@ require_relative '../variables'
 require_relative '../production_rule'
 require_relative '../data/commodity'
 require_relative '../data/data_parsing'
+require_relative '../events/event_reactor'
 require_relative '../observers/trade_tracker'
 require_relative '../observers/file_logger'
 require_relative '../observers/commodity_tracker'
@@ -47,23 +48,16 @@ resources.each { |resource_file|
 }
 
 Inventory.max_stock = max_stock
-market = Market.new(Commodities.all)
-spawner = AgentSpawner.new(market, SimData.instance.agent_roles, starting_funds)
+
+trade_tracker = TradeTracker.new
+file_logger = FileLogger.new
+commodity_tracker = CommodityTracker.new
+
+market = Market.new(Commodities.all, trade_tracker)
+spawner = AgentSpawner.new(market, trade_tracker, SimData.instance.agent_roles, starting_funds)
 agents = spawner.spawn_agents(num_agents)
 
-# Event subscriptions
-market.trade_cleared_event << TradeTracker.instance
-market.round_change_event << TradeTracker.instance
-
-market.trade_cleared_event << FileLogger.instance
-market.round_change_event << FileLogger.instance
-
-market.trade_cleared_event << CommodityTracker.instance
-market.round_change_event << CommodityTracker.instance
-market.ask_posted_event << CommodityTracker.instance
-market.bid_posted_event << CommodityTracker.instance
-
-CommodityTracker.instance.set_commodities(Commodities.all)
+commodity_tracker.set_commodities(Commodities.all)
 
 num_rounds.times do |n|
   puts "Round #{n + 1} start"
@@ -87,7 +81,7 @@ num_rounds.times do |n|
   agents += new_agents
 end
 
-market.round_change_event.fire
+EventReactor.instance.publish(RoundChangeEvent.new)
 
 Commodities.all.each do |commodity|
   puts "#{commodity.name} = #{market.last_price_of(commodity)}"

@@ -2,11 +2,10 @@
 #
 # Author::  Kyle Mullins
 
-require_relative '../observers/trade_tracker'
-
 class AgentSpawner
-  def initialize(market, agent_roles, *params)
+  def initialize(market, trade_tracker, agent_roles, *params)
     @market = market
+    @trade_tracker = trade_tracker
     @agent_roles = agent_roles
     @agent_params = params
   end
@@ -41,7 +40,7 @@ class AgentSpawner
     max_profitability = -Float::MAX
 
     @agent_roles.each do |agent_role|
-      profitability = TradeTracker.instance.profitability_of(agent_role)
+      profitability = @trade_tracker.profitability_of(agent_role)
 
       if profitability > max_profitability
         most_profitable_type = agent_role
@@ -57,7 +56,7 @@ class AgentSpawner
     profitability_ratios = {}
 
     @agent_roles.each do |agent_role|
-      profitability = TradeTracker.instance.profitability_of(agent_role)
+      profitability = @trade_tracker.profitability_of(agent_role)
       total_profitability += profitability
       profitability_ratios[agent_role] = profitability
     end

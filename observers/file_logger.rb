@@ -2,11 +2,9 @@
 #
 # Author::  Kyle Mullins
 
-require 'singleton'
+require_relative '../events/event_reactor'
 
 class FileLogger
-  include Singleton
-
   def initialize
     @current_round = 1
 
@@ -15,9 +13,12 @@ class FileLogger
     @commodity_logs = Hash.new do |hash, key|
       hash[key] = File.new("#{log_directory}/#{key.name}.txt", 'w')
     end
+
+    EventReactor.instance.subscribe(:trade_cleared, &method(:log_trade_cleared))
+    EventReactor.instance.subscribe(:round_change, &method(:log_round_change))
   end
 
-  def log_round_change
+  def log_round_change(_event)
     round_change_str = "Round #{@current_round} start\n"
 
     @all_trades_log << round_change_str
@@ -26,19 +27,13 @@ class FileLogger
     @current_round += 1
   end
 
-  def log_trade_cleared(buyer, seller, commodity, quantity_traded, clearing_price)
-    @all_trades_log << "#{quantity_traded} #{commodity.name} at #{clearing_price.round(2)}/unit\n"
-    @all_trades_log << "\tBuyer: #{buyer.role.name} (#{buyer.object_id})\n"
-    @all_trades_log << "\tSeller: #{seller.role.name} (#{seller.object_id})\n"
+  def log_trade_cleared(event)
+    trade = event.cleared_trade
 
-    @commodity_logs[commodity] << "#{quantity_traded} at #{clearing_price.round(2)}/unit\n"
-  end
+    @all_trades_log << "#{trade.quantity} #{trade.commodity.name} at #{trade.price.round(2)}/unit\n"
+    @all_trades_log << "\tBuyer: #{trade.buyer.role.name} (#{trade.buyer.object_id})\n"
+    @all_trades_log << "\tSeller: #{trade.seller.role.name} (#{trade.seller.object_id})\n"
 
-  def update(*args)
-    if args.empty?
-      log_round_change
-    elsif args.length == 5
-      log_trade_cleared(*args)
-    end
+    @commodity_logs[trade.commodity] << "#{trade.quantity} at #{trade.price.round(2)}/unit\n"
   end
 end

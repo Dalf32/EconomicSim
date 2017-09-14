@@ -2,15 +2,12 @@
 #
 # Author::  Kyle Mullins
 
-require 'singleton'
-
 require_relative '../data/trades'
 require_relative '../utilities/tracked_array'
 require_relative '../utilities/tracked_ring_buffer'
+require_relative '../events/event_reactor'
 
 class TradeTracker
-  include Singleton
-
   attr_reader :history_window_size
 
   def initialize
@@ -29,6 +26,9 @@ class TradeTracker
     @trades_by_commodity = Hash.new { |hash, key| hash[key] = [] }
     @trades_by_buyer_type = Hash.new { |hash, key| hash[key] = [] }
     @trades_by_seller_type = Hash.new { |hash, key| hash[key] = [] }
+
+    EventReactor.instance.subscribe(:trade_cleared, &method(:trade_cleared))
+    EventReactor.instance.subscribe(:round_change, &method(:change_round))
   end
 
   def price_of(commodity)
@@ -39,7 +39,7 @@ class TradeTracker
     @agent_profits[agent_type].avg
   end
 
-  def change_round
+  def change_round(_event)
     @current_round += 1
     @trades_by_round[@current_round] = []
 
@@ -58,29 +58,20 @@ class TradeTracker
     end
   end
 
-  def trade_cleared(buyer, seller, commodity, quantity_traded, clearing_price)
-    trade = ClearedTrade.new(buyer.role, seller.role,
-                             commodity, quantity_traded, clearing_price)
+  def trade_cleared(event)
+    trade = event.cleared_trade
     id = next_id
 
     @cleared_trades[id] = trade
     @trades_by_round[@current_round] << id
-    @trades_by_commodity[commodity] << id
-    @trades_by_buyer_type[buyer.role] << id
-    @trades_by_seller_type[seller.role] << id
+    @trades_by_commodity[trade.commodity] << id
+    @trades_by_buyer_type[trade.buyer.role] << id
+    @trades_by_seller_type[trade.seller.role] << id
 
-    @current_agent_profits[buyer.role] -= trade.total_cost
-    @current_agent_profits[seller.role] += trade.total_cost
+    @current_agent_profits[trade.buyer.role] -= trade.total_cost
+    @current_agent_profits[trade.seller.role] += trade.total_cost
 
-    @current_commodity_prices[commodity] << clearing_price
-  end
-
-  def update(*args)
-    if args.empty?
-      change_round
-    elsif args.length == 5
-      trade_cleared(*args)
-    end
+    @current_commodity_prices[trade.commodity] << trade.price
   end
 
   private
