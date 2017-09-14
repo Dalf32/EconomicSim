@@ -9,7 +9,7 @@ require_relative 'commodity'
 require_relative '../agent_role'
 require_relative '../conditions'
 require_relative '../variables'
-require_relative '../production_rule'
+require_relative '../rules'
 
 class DataParser
   def self.parse_spec(filename)
