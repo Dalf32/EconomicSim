@@ -3,7 +3,7 @@
 # Author::  Kyle Mullins
 
 require_relative 'sim_data'
-require_relative '../variables'
+require_relative 'variables/variables'
 
 class VariableBuilder
   def self.from_hash(variable_hash)

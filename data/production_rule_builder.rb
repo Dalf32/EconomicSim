@@ -3,7 +3,7 @@
 # Author::  Kyle Mullins
 
 require_relative 'sim_data'
-require_relative '../rules'
+require_relative 'rules/rules'
 
 class ProductionRuleBuilder
   def self.from_hash(rule_hash)

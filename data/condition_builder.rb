@@ -3,7 +3,7 @@
 # Author::  Kyle Mullins
 
 require_relative 'sim_data'
-require_relative '../conditions'
+require_relative 'conditions/conditions'
 
 class ConditionBuilder
   def self.from_hash(condition_hash)

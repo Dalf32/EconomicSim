@@ -1,4 +1,4 @@
-# data_parsing.rb
+# data_parser.rb
 #
 # Author::  Kyle Mullins
 

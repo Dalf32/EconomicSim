@@ -2,7 +2,6 @@
 #
 # Author::  Kyle Mullins
 
-require_relative '../data/trades'
 require_relative '../utilities/tracked_array'
 require_relative '../utilities/tracked_ring_buffer'
 require_relative '../events/event_reactor'
