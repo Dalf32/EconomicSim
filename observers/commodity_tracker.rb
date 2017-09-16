@@ -25,7 +25,9 @@ class CommodityTracker
 
     @all_files = [@supply_file, @demand_file, @ratio_file, @mean_price_file,
                   @price_variance_file]
+  end
 
+  def register_events
     EventReactor.instance.subscribe(:trade_cleared, &method(:trade_cleared))
     EventReactor.instance.subscribe(:round_change, &method(:change_round))
     EventReactor.instance.subscribe(:ask_posted, &method(:ask_posted))

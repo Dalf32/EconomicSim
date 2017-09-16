@@ -9,7 +9,7 @@ require_relative 'commodity'
 require_relative 'agent_role_builder'
 
 class DataParser
-  def self.parse_spec(filename)
+  def self.parse_resources(filename)
     raw_json = DataParser.read_file(filename)
     parsed_json = JSON.parse(raw_json)
 

@@ -13,7 +13,9 @@ class FileLogger
     @commodity_logs = Hash.new do |hash, key|
       hash[key] = File.new("#{log_directory}/#{key.name}.txt", 'w')
     end
+  end
 
+  def register_events
     EventReactor.instance.subscribe(:trade_cleared, &method(:log_trade_cleared))
     EventReactor.instance.subscribe(:round_change, &method(:log_round_change))
   end

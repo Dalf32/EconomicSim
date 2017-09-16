@@ -3,7 +3,7 @@
 # Author::  Kyle Mullins
 
 require_relative 'sim_data'
-require_relative '../agent_role'
+require_relative 'agent_role'
 require_relative 'condition_builder'
 require_relative 'variable_builder'
 require_relative 'production_rule_builder'

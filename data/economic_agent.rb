@@ -2,9 +2,9 @@
 #
 # Author::  Kyle Mullins
 
-require_relative 'utilities/extensions'
-require_relative 'data/price_belief'
-require_relative 'data/inventory'
+require_relative '../utilities/extensions'
+require_relative 'price_belief'
+require_relative 'inventory'
 
 class EconomicAgent
   attr_reader :role, :market, :funds, :inventory

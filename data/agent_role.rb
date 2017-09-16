@@ -2,7 +2,8 @@
 #
 # Author::  Kyle Mullins
 
-require_relative 'data/inventory'
+require_relative 'inventory'
+require_relative 'economic_agent'
 
 class AgentRole
   BUYS = 0x01

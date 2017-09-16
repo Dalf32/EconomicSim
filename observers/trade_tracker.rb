@@ -25,7 +25,9 @@ class TradeTracker
     @trades_by_commodity = Hash.new { |hash, key| hash[key] = [] }
     @trades_by_buyer_type = Hash.new { |hash, key| hash[key] = [] }
     @trades_by_seller_type = Hash.new { |hash, key| hash[key] = [] }
+  end
 
+  def register_events
     EventReactor.instance.subscribe(:trade_cleared, &method(:trade_cleared))
     EventReactor.instance.subscribe(:round_change, &method(:change_round))
   end
