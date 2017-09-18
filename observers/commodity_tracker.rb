@@ -6,9 +6,9 @@ require_relative '../utilities/tracked_array'
 require_relative '../events/event_reactor'
 
 class CommodityTracker
-  def initialize
+  def initialize(commodities)
     @current_round = 0
-    @commodities = nil
+    @commodities = commodities
 
     @supply = Hash.new { |hash, key| hash[key] = 0 }
     @demand = Hash.new { |hash, key| hash[key] = 0 }
@@ -32,15 +32,6 @@ class CommodityTracker
     EventReactor.instance.subscribe(:round_change, &method(:change_round))
     EventReactor.instance.subscribe(:ask_posted, &method(:ask_posted))
     EventReactor.instance.subscribe(:bid_posted, &method(:bid_posted))
-  end
-
-  def set_commodities(commodities)
-    @commodities = commodities
-
-    @commodities.each do |commodity|
-      @supply[commodity] = 0
-      @demand[commodity] = 0
-    end
   end
 
   def change_round(_event)
@@ -93,19 +84,5 @@ class CommodityTracker
     @all_prices[trade.commodity] << trade.price
     @max_prices[trade.commodity] = trade.price unless @max_prices[trade.commodity] >= trade.price
     @min_prices[trade.commodity] = trade.price unless @min_prices[trade.commodity] <= trade.price
-  end
-
-  def update(*args)
-    if args.empty?
-      change_round
-    elsif args.length == 2
-      if args[1].is_a?(Ask)
-        ask_posted(*args)
-      elsif args[1].is_a?(Bid)
-        bid_posted(*args)
-      end
-    elsif args.length == 5
-      trade_cleared(*args)
-    end
   end
 end

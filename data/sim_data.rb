@@ -2,10 +2,8 @@
 #
 # Author::  Kyle Mullins
 
-require 'singleton'
-
 class SimData
-  include Singleton
+  attr_accessor :num_rounds, :num_agents, :starting_funds, :max_stock
 
   def initialize
     @commodities = {}

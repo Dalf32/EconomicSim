@@ -3,7 +3,10 @@
 # Author::  Kyle Mullins
 
 class HasCommodityCondition
-  def initialize(commodity)
+  attr_reader :id
+
+  def initialize(id, commodity)
+    @id = id
     @commodity = commodity
   end
 

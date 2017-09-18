@@ -1,10 +1,7 @@
 {
-    "Parameters":
-    {
-        "Resources": ["resources/Market_Spec.json"],
-        "NumRounds": 100,
-        "NumAgents": 1000,
-        "StartingFunds": 200,
-        "MaxStock": 200
-    }
+    "Resources": ["resources/Market_Spec.json"],
+    "NumRounds": 100,
+    "NumAgents": 1000,
+    "StartingFunds": 200,
+    "MaxStock": 200
 }

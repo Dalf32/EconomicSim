@@ -6,8 +6,8 @@ require_relative 'sim_data'
 require_relative 'rules/rules'
 
 class ProductionRuleBuilder
-  def self.from_hash(rule_hash)
-    commodity = SimData.instance.get_commodity(rule_hash['Commodity'])
+  def self.from_hash(rule_hash, sim_data)
+    commodity = sim_data.get_commodity(rule_hash['Commodity'])
     condition_ids = rule_hash['Conditions']
 
     case rule_hash['Amount']

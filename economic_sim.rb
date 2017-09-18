@@ -2,8 +2,7 @@
 #
 # Author::  Kyle Mullins
 
-require_relative 'data/data_parser'
-require_relative 'data/sim_data'
+require_relative 'data/sim_data_builder'
 require_relative 'data/inventory'
 require_relative 'observers/trade_tracker'
 require_relative 'observers/file_logger'
@@ -20,32 +19,26 @@ if ARGV.empty?
 end
 
 params_file = ARGV.first
-params = DataParser.parse_params(params_file)
+sim_data = SimDataBuilder.from_file(params_file)
 
-params['Resources'].each do |resource_file|
-  DataParser.parse_resources(resource_file)
-end
-
-Inventory.max_stock = params['MaxStock']
+Inventory.max_stock = sim_data.max_stock
 
 trade_tracker = TradeTracker.new
 trade_tracker.register_events
 file_logger = FileLogger.new
 file_logger.register_events
-commodity_tracker = CommodityTracker.new
+commodity_tracker = CommodityTracker.new(sim_data.commodities)
 commodity_tracker.register_events
 
-market = Market.new(SimData.instance.commodities, trade_tracker)
-spawner = AgentSpawner.new(market, trade_tracker, SimData.instance.agent_roles,
-                           params['StartingFunds'])
+market = Market.new(sim_data.commodities, trade_tracker)
+spawner = AgentSpawner.new(market, trade_tracker, sim_data.agent_roles,
+                           sim_data.starting_funds)
 
-commodity_tracker.set_commodities(SimData.instance.commodities)
+simulation = Simulation.new(market, spawner, sim_data.num_agents)
+simulation.run(sim_data.num_rounds)
 
-simulation = Simulation.new(market, spawner,params['NumAgents'])
-simulation.run(params['NumRounds'])
-
-SimData.instance.commodities.each do |commodity|
+sim_data.commodities.each do |commodity|
   puts "#{commodity.name} = #{market.last_price_of(commodity)}"
-  market.purchase_history[commodity].each { |round_ary| print "#{round_ary.length} " }
+  print market.purchase_history[commodity].map(&:length).join(' ')
   puts
 end

@@ -3,7 +3,10 @@
 # Author::  Kyle Mullins
 
 class ChanceCondition
-  def initialize(chance)
+  attr_reader :id
+
+  def initialize(id, chance)
+    @id = id
     @chance = chance
   end
 

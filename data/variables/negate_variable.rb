@@ -3,7 +3,10 @@
 # Author::  Kyle Mullins
 
 class NegateVariable
-  def initialize(variable)
+  attr_reader :id
+
+  def initialize(id, variable)
+    @id = id
     @variable = variable
   end
 

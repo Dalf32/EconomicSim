@@ -24,12 +24,12 @@ class AgentRole
     EconomicAgent.new(self, market, starting_funds, @inventory.clone)
   end
 
-  def add_condition(id, condition)
-    @conditions[id] = condition
+  def add_condition(condition)
+    @conditions[condition.id] = condition
   end
 
-  def add_variable(id, variable)
-    @variables[id] = variable
+  def add_variable(variable)
+    @variables[variable.id] = variable
   end
 
   def set_commodity_prefs(commodity, ideal_stock, buys, sells)

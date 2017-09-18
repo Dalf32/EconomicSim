@@ -6,16 +6,16 @@ require_relative 'sim_data'
 require_relative 'conditions/conditions'
 
 class ConditionBuilder
-  def self.from_hash(condition_hash)
+  def self.from_hash(condition_hash, sim_data)
     id = condition_hash['ID']
 
     case condition_hash['Type']
     when 'HasCommodity'
-      commodity = SimData.instance.get_commodity(condition_hash['Commodity'])
-      { id => HasCommodityCondition.new(commodity) }
+      commodity = sim_data.get_commodity(condition_hash['Commodity'])
+      HasCommodityCondition.new(id, commodity)
     when 'Chance'
       chance = condition_hash['Chance']
-      { id => ChanceCondition.new(chance) }
+      ChanceCondition.new(id, chance)
     else
       raise 'Illegal Condition JSON'
     end
