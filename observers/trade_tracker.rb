@@ -28,8 +28,8 @@ class TradeTracker
   end
 
   def register_events
-    EventReactor.instance.subscribe(:trade_cleared, &method(:trade_cleared))
-    EventReactor.instance.subscribe(:round_change, &method(:change_round))
+    EventReactor::sub(:trade_cleared, &method(:trade_cleared))
+    EventReactor::sub(:round_change, &method(:change_round))
   end
 
   def price_of(commodity)
@@ -42,13 +42,10 @@ class TradeTracker
 
   def change_round(_event)
     @current_round += 1
-    @trades_by_round[@current_round] = []
 
     @current_agent_profits.each_key do |agent_role|
-      unless @current_agent_profits[agent_role].zero?
-        @agent_profits[agent_role] << @current_agent_profits[agent_role]
-        @current_agent_profits[agent_role] = 0
-      end
+      @agent_profits[agent_role] << @current_agent_profits[agent_role]
+      @current_agent_profits[agent_role] = 0
     end
 
     @current_commodity_prices.each_key do |commodity|

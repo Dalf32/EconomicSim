@@ -15,24 +15,18 @@ class Market
     @commodities = commodities
     @trade_tracker = trade_tracker
 
-    @bids = {}
-    @asks = {}
-    @purchase_history = {}
-
-    @commodities.each do |commodity|
-      @asks[commodity] = []
-      @bids[commodity] = []
-      @purchase_history[commodity] = TrackedArray.new
-    end
+    @bids = Hash.new { |h, k| h[k] = [] }
+    @asks = Hash.new { |h, k| h[k] = [] }
+    @purchase_history = Hash.new { |h, k| h[k] = TrackedArray.new }
   end
 
   def post_ask(commodity, ask)
-    EventReactor.instance.publish(AskPostedEvent.new(commodity, ask))
+    EventReactor::pub(AskPostedEvent.new(commodity, ask))
     @asks[commodity] << ask
   end
 
   def post_bid(commodity, bid)
-    EventReactor.instance.publish(BidPostedEvent.new(commodity, bid))
+    EventReactor::pub(BidPostedEvent.new(commodity, bid))
     @bids[commodity] << bid
   end
 
@@ -41,15 +35,11 @@ class Market
   end
 
   def mean_price_of(commodity)
-    round_avgs = []
-
-    @purchase_history[commodity].map { |round_history| round_avgs << round_history.avg }
-
-    round_avgs.avg
+    @purchase_history[commodity].map { |round_history| round_history.avg }.avg
   end
 
   def resolve_all_offers
-    EventReactor.instance.publish(RoundChangeEvent.new)
+    EventReactor::pub(RoundChangeEvent.new)
 
     @commodities.each { |commodity| resolve_offers(commodity) }
   end
@@ -63,13 +53,13 @@ class Market
     until @bids[commodity].empty? || @asks[commodity].empty?
       bid = @bids[commodity][0]
       ask = @asks[commodity][0]
-      quantity_traded = Math.min(ask.amount_remaining, bid.amount_remaining)
+      quantity_traded = [ask.amount_remaining, bid.amount_remaining].min
       clearing_price = Math.avg(ask.ask_price, bid.bid_price)
 
       if quantity_traded > 0
         cleared_trade = ClearedTrade.new(bid.buyer, ask.seller, commodity,
                                          quantity_traded, clearing_price)
-        EventReactor.instance.publish(TradeClearedEvent.new(cleared_trade))
+        EventReactor::pub(TradeClearedEvent.new(cleared_trade))
 
         purchases << clearing_price
 

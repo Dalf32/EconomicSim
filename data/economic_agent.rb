@@ -21,6 +21,10 @@ class EconomicAgent
     @outstanding_bids = Hash.new { |hash, key| hash[key] = nil }
   end
 
+  def bankrupt?
+    @funds.negative?
+  end
+
   def perform_production
     @role.perform_production(self)
   end
@@ -111,7 +115,7 @@ class EconomicAgent
   def create_bid(commodity, upper_limit)
     bid_price = @beliefs[commodity].choose_price
     proposed_amount = determine_bid_amount(commodity)
-    desired_amount = Math.min(proposed_amount, upper_limit)
+    desired_amount = [proposed_amount, upper_limit].min
 
     bid = Bid.new(self, bid_price, desired_amount)
 
@@ -123,7 +127,7 @@ class EconomicAgent
     if @inventory.stock_of?(commodity)
       ask_price = @beliefs[commodity].choose_price
       proposed_amount = determine_ask_amount(commodity)
-      offer_amount = Math.max(proposed_amount, lower_limit)
+      offer_amount = [proposed_amount, lower_limit].max
       # offer_amount = Math.min(offer_amount, @inventory.stock_of(commodity))
 
       ask = Ask.new(self, ask_price, offer_amount)
@@ -141,7 +145,7 @@ class EconomicAgent
 
     favorability = (last_price - price_belief.min) / price_belief.span.to_f
     ask_amt = favorability * @inventory.stock_of(commodity)
-    Math.max(ask_amt.to_i, 1)
+    [ask_amt.to_i, 1].max
   end
 
   def determine_bid_amount(commodity)
@@ -154,6 +158,6 @@ class EconomicAgent
     # bid_amt = (price_belief.max - favorability) * (@inventory_limit - @inventory[commodity])
     bid_amt = favorability * @inventory.shortage_of(commodity)
     raise 'NAN!' if bid_amt.nan?
-    Math.max(bid_amt.to_i, 1)
+    [bid_amt.to_i, 1].max
   end
 end

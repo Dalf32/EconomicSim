@@ -12,13 +12,12 @@ class AgentRoleBuilder
   def self.from_hash(agent_hash, sim_data)
     name = agent_hash['Name']
 
-    builder = AgentRoleBuilder.new(name, sim_data)
-                              .conditions(agent_hash['Conditions'])
-                              .variables(agent_hash['Variables'])
-                              .productions(agent_hash['Productions'])
-                              .commodities(agent_hash['Commodities'])
-
-    builder.build
+    AgentRoleBuilder.new(name, sim_data)
+                    .conditions(agent_hash['Conditions'])
+                    .variables(agent_hash['Variables'])
+                    .productions(agent_hash['Productions'])
+                    .commodities(agent_hash['Commodities'])
+                    .build
   end
 
   def initialize(name, sim_data)

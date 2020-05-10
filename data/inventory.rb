@@ -38,7 +38,7 @@ class Inventory
   end
 
   def empty_space
-    @@max_stock - total_stock
+    self.max_stock - total_stock
   end
 
   def stock_of?(commodity)
@@ -84,10 +84,10 @@ class Inventory
   end
 
   def self.max_stock
-    @@max_stock
+    @max_stock
   end
 
   def self.max_stock=(max_stock)
-    @@max_stock = max_stock
+    @max_stock = max_stock
   end
 end

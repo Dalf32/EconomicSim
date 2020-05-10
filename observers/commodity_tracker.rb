@@ -28,10 +28,10 @@ class CommodityTracker
   end
 
   def register_events
-    EventReactor.instance.subscribe(:trade_cleared, &method(:trade_cleared))
-    EventReactor.instance.subscribe(:round_change, &method(:change_round))
-    EventReactor.instance.subscribe(:ask_posted, &method(:ask_posted))
-    EventReactor.instance.subscribe(:bid_posted, &method(:bid_posted))
+    EventReactor::sub(:trade_cleared, &method(:trade_cleared))
+    EventReactor::sub(:round_change, &method(:change_round))
+    EventReactor::sub(:ask_posted, &method(:ask_posted))
+    EventReactor::sub(:bid_posted, &method(:bid_posted))
   end
 
   def change_round(_event)

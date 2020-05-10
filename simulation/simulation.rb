@@ -14,25 +14,24 @@ class Simulation
   end
 
   def run(num_rounds)
-    agents = @agent_spawner.spawn_agents(@num_agents)
+    EventReactor.instance.is_synchronous = true
+    agents = @agent_spawner.spawn_all_agents(@num_agents)
 
     num_rounds.times do |n|
       puts "Round #{n + 1} start"
 
       sim_round(agents)
 
-      deleted = agents.reject! { |agent| agent.funds < 0 }
+      agents = agents.reject(&:bankrupt?)
       puts agents.size
 
-      next if deleted.nil?
-
-      num_deleted = (@num_agents - deleted.size)
+      num_deleted = (@num_agents - agents.size)
       puts num_deleted
-      new_agents = @agent_spawner.spawn_profitable_agents(num_deleted)
-      agents += new_agents
+
+      agents += @agent_spawner.spawn_profitable_agents(num_deleted)
     end
 
-    EventReactor.instance.publish(RoundChangeEvent.new)
+    EventReactor::pub(RoundChangeEvent.new)
   end
 
   private

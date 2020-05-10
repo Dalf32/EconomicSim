@@ -16,8 +16,8 @@ class FileLogger
   end
 
   def register_events
-    EventReactor.instance.subscribe(:trade_cleared, &method(:log_trade_cleared))
-    EventReactor.instance.subscribe(:round_change, &method(:log_round_change))
+    EventReactor::sub(:trade_cleared, &method(:log_trade_cleared))
+    EventReactor::sub(:round_change, &method(:log_round_change))
   end
 
   def log_round_change(_event)

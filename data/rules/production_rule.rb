@@ -9,10 +9,6 @@ class ProductionRule
   end
 
   def should_produce?(condition_vals)
-    should_produce = true
-
-    @condition_ids.each { |id| should_produce &= condition_vals[id] }
-
-    should_produce
+    @condition_ids.all? { |id| condition_vals[id] }
   end
 end

@@ -58,19 +58,11 @@ class AgentRole
   end
 
   def commodities_to_buy
-    bought = []
-
-    @trade_prefs.each_key { |commodity| bought << commodity if buys?(commodity) }
-
-    bought
+    @trade_prefs.keys.select { |commodity| buys?(commodity) }
   end
 
   def commodities_to_sell
-    sold = []
-
-    @trade_prefs.each_key { |commodity| sold << commodity if sells?(commodity) }
-
-    sold
+    @trade_prefs.keys.select { |commodity| sells?(commodity) }
   end
 
   def evaluate_condition(agent, id)
@@ -84,18 +76,10 @@ class AgentRole
   private
 
   def evaluate_conditions(agent)
-    condition_vals = {}
-
-    @conditions.each_pair { |id, cond| condition_vals[id] = cond.evaluate(agent) }
-
-    condition_vals
+    @conditions.map { |id, cond| [id, cond.evaluate(agent)] }.to_h
   end
 
   def evaluate_variables(agent)
-    variable_vals = {}
-
-    @variables.each_pair { |id, var| variable_vals[id] = var.evaluate(agent) }
-
-    variable_vals
+    @variables.map { |id, var| [id, var.evaluate(agent)] }.to_h
   end
 end

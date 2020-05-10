@@ -12,8 +12,8 @@ class VariableProductionRule < ProductionRule
   end
 
   def produce(agent, condition_vals, variable_vals)
-    if should_produce?(condition_vals)
-      agent.inventory.change_stock_of(@commodity, variable_vals[@amount_variable_id])
-    end
+    return unless should_produce?(condition_vals)
+
+    agent.inventory.change_stock_of(@commodity, variable_vals[@amount_variable_id])
   end
 end
