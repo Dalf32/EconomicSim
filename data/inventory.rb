@@ -17,18 +17,16 @@ class Inventory
   end
 
   def clone
-    inventory = Inventory.new(@commodities.keys)
-
-    @commodities.each_pair do |commodity, id|
-      inventory.set_ideal_stock_of(commodity, @ideal_stock[id])
-      inventory.set_stock_of(commodity, @stock[id])
+    Inventory.new(@commodities.keys).tap do |inventory|
+      @commodities.each_pair do |commodity, id|
+        inventory.set_ideal_stock_of(commodity, @ideal_stock[id])
+        inventory.set_stock_of(commodity, @stock[id])
+      end
     end
-
-    inventory
   end
 
   def set_ideal_stock_of(commodity, ideal)
-    id = @commodities[commodity]
+    id = commodity_id(commodity)
     @ideal_stock[id] = ideal
     @stock[id] = ideal
   end
@@ -42,15 +40,15 @@ class Inventory
   end
 
   def stock_of?(commodity)
-    stock_of(commodity) != 0
+    stock_of(commodity).positive?
   end
 
   def stock_of(commodity)
-    @stock[@commodities[commodity]]
+    @stock[commodity_id(commodity)]
   end
 
   def ideal_stock_of(commodity)
-    @ideal_stock[@commodities[commodity]]
+    @ideal_stock[commodity_id(commodity)]
   end
 
   def surplus_of?(commodity)
@@ -65,22 +63,22 @@ class Inventory
     amount = stock_of(commodity)
     ideal = ideal_stock_of(commodity)
 
-    amount > ideal ? amount - ideal : 0
+    [amount - ideal, 0].max
   end
 
   def shortage_of(commodity)
     amount = stock_of(commodity)
     ideal = ideal_stock_of(commodity)
 
-    amount < ideal ? ideal - amount : 0
+    [ideal - amount, 0].max
   end
 
   def change_stock_of(commodity, change)
-    @stock[@commodities[commodity]] += change
+    @stock[commodity_id(commodity)] += change
   end
 
   def set_stock_of(commodity, stock)
-    @stock[@commodities[commodity]] = stock
+    @stock[commodity_id(commodity)] = stock
   end
 
   def self.max_stock
@@ -89,5 +87,15 @@ class Inventory
 
   def self.max_stock=(max_stock)
     @max_stock = max_stock
+  end
+
+  private
+
+  def commodity_id(commodity)
+    unless commodity.is_a?(Commodity)
+      commodity = @commodities.keys.find { |c| c.name == commodity }
+    end
+
+    @commodities[commodity]
   end
 end

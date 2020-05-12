@@ -22,18 +22,18 @@
             "Conditions": [
                 {
                     "ID": 1,
-                    "Type": "HasCommodity",
-                    "Commodity": "Wood"
+                    "Function": "has_commodity",
+                    "Parameters": ["Wood"]
                 },
                 {
                     "ID": 2,
-                    "Type": "HasCommodity",
-                    "Commodity": "Tools"
+                    "Function": "has_commodity",
+                    "Parameters": ["Tools"]
                 },
                 {
                     "ID": 3,
-                    "Type": "Chance",
-                    "Chance": 0.1
+                    "Function": "chance",
+                    "Parameters": [0.1]
                 }
             ],
 			"Productions": [
@@ -96,18 +96,18 @@
             "Conditions": [
                 {
                     "ID": 1,
-                    "Type": "HasCommodity",
-                    "Commodity": "Wheat"
+                    "Function": "has_commodity",
+                    "Parameters": ["Wheat"]
                 },
                 {
                     "ID": 2,
-                    "Type": "HasCommodity",
-                    "Commodity": "Tools"
+                    "Function": "has_commodity",
+                    "Parameters": ["Tools"]
                 },
                 {
                     "ID": 3,
-                    "Type": "Chance",
-                    "Chance": 0.1
+                    "Function": "chance",
+                    "Parameters": [0.1]
                 }
             ],
             "Productions": [
@@ -170,18 +170,18 @@
             "Conditions": [
                 {
                     "ID": 1,
-                    "Type": "HasCommodity",
-                    "Commodity": "Wheat"
+                    "Function": "has_commodity",
+                    "Parameters": ["Wheat"]
                 },
                 {
                     "ID": 2,
-                    "Type": "HasCommodity",
-                    "Commodity": "Tools"
+                    "Function": "has_commodity",
+                    "Parameters": ["Tools"]
                 },
                 {
                     "ID": 3,
-                    "Type": "Chance",
-                    "Chance": 0.1
+                    "Function": "chance",
+                    "Parameters": [0.1]
                 }
             ],
             "Variables": [
@@ -258,8 +258,8 @@
             "Conditions": [
                 {
                     "ID": 1,
-                    "Type": "HasCommodity",
-                    "Commodity": "Wheat"
+                    "Function": "has_commodity",
+                    "Parameters": ["Wheat"]
                 }
             ],
             "Variables": [
@@ -331,18 +331,18 @@
             "Conditions": [
                 {
                     "ID": 1,
-                    "Type": "HasCommodity",
-                    "Commodity": "Wheat"
+                    "Function": "has_commodity",
+                    "Parameters": ["Wheat"]
                 },
                 {
                     "ID": 2,
-                    "Type": "HasCommodity",
-                    "Commodity": "Tools"
+                    "Function": "has_commodity",
+                    "Parameters": ["Tools"]
                 },
                 {
                     "ID": 3,
-                    "Type": "Chance",
-                    "Chance": 0.1
+                    "Function": "chance",
+                    "Parameters": [0.1]
                 }
             ],
             "Productions": [

@@ -1,5 +1,6 @@
 {
-    "Resources": ["resources/Market_Spec.json"],
+    "Resources": ["resources/market_spec.json"],
+    "Scripts": ["resources/condition_functions.rb"],
     "NumRounds": 100,
     "NumAgents": 1000,
     "StartingFunds": 200,

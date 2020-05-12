@@ -14,12 +14,14 @@ class SimDataBuilder
     resource_hashes = params_hash['Resources'].map do |resource_file|
       SimDataBuilder.read_file(resource_file)
     end
+    scripts = params_hash['Scripts']
 
-    SimDataBuilder.from_hash(params_hash, resource_hashes)
+    SimDataBuilder.from_hash(params_hash, resource_hashes, scripts)
   end
 
-  def self.from_hash(params_hash, resource_hashes)
+  def self.from_hash(params_hash, resource_hashes, scripts)
     builder = SimDataBuilder.new.params(params_hash)
+    scripts.each { |script_file| builder.script(script_file) }
     resource_hashes.each { |resource_hash| builder.resources(resource_hash) }
 
     builder.build
@@ -47,6 +49,10 @@ class SimDataBuilder
   def resources(resources_hash)
     commodities(resources_hash['Commodities'])
     agents(resources_hash['Agents'])
+  end
+
+  def script(script_file)
+    load script_file
   end
 
   def commodities(commodities_hash)

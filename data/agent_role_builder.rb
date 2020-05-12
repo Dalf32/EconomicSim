@@ -4,9 +4,9 @@
 
 require_relative 'sim_data'
 require_relative 'agent_role'
-require_relative 'condition_builder'
 require_relative 'variable_builder'
 require_relative 'production_rule_builder'
+require_relative 'conditions/condition'
 
 class AgentRoleBuilder
   def self.from_hash(agent_hash, sim_data)
@@ -33,8 +33,7 @@ class AgentRoleBuilder
     return self if conditions_hash.nil?
 
     conditions_hash.each do |condition_hash|
-      condition = ConditionBuilder.from_hash(condition_hash, @sim_data)
-      @role.add_condition(condition)
+      @role.add_condition(Condition.from_hash(condition_hash))
     end
 
     self
