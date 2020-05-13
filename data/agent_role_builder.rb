@@ -4,7 +4,6 @@
 
 require_relative 'sim_data'
 require_relative 'agent_role'
-require_relative 'variable_builder'
 require_relative 'rules/production_rule'
 require_relative 'conditions/condition'
 
@@ -14,7 +13,6 @@ class AgentRoleBuilder
 
     AgentRoleBuilder.new(name, sim_data)
                     .conditions(agent_hash['Conditions'])
-                    .variables(agent_hash['Variables'])
                     .productions(agent_hash['Productions'])
                     .commodities(agent_hash['Commodities'])
                     .build
@@ -34,17 +32,6 @@ class AgentRoleBuilder
 
     conditions_hash.each do |condition_hash|
       @role.add_condition(Condition.from_hash(condition_hash))
-    end
-
-    self
-  end
-
-  def variables(variables_hash)
-    return self if variables_hash.nil?
-
-    variables_hash.each do |variable_hash|
-      variable = VariableBuilder.from_hash(variable_hash, @sim_data)
-      @role.add_variable(variable)
     end
 
     self

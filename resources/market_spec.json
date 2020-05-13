@@ -184,18 +184,6 @@
                     "Parameters": [0.1]
                 }
             ],
-            "Variables": [
-                {
-                    "ID": 1,
-                    "Type": "CommodityQuantity",
-                    "Commodity": "Ore"
-                },
-                {
-                    "ID": 2,
-                    "Type": "NegateVariable",
-                    "Variable": 1
-                }
-            ],
             "Productions": [
                 {
                     "Function": "consume_amount",
@@ -253,18 +241,6 @@
                     "ID": "Has Wheat",
                     "Function": "has_commodity",
                     "Parameters": ["Wheat"]
-                }
-            ],
-            "Variables": [
-                {
-                    "ID": 1,
-                    "Type": "CommodityQuantity",
-                    "Commodity": "Metal"
-                },
-                {
-                    "ID": 2,
-                    "Type": "NegateVariable",
-                    "Variable": 1
                 }
             ],
             "Productions": [
