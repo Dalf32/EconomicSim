@@ -21,42 +21,42 @@
 			"Name": "Farmer",
             "Conditions": [
                 {
-                    "ID": 1,
+                    "ID": "Has Wood",
                     "Function": "has_commodity",
                     "Parameters": ["Wood"]
                 },
                 {
-                    "ID": 2,
+                    "ID": "Has Tools",
                     "Function": "has_commodity",
                     "Parameters": ["Tools"]
                 },
                 {
-                    "ID": 3,
+                    "ID": "10% Chance",
                     "Function": "chance",
                     "Parameters": [0.1]
                 }
             ],
 			"Productions": [
                 {
-                    "Commodity": "Wood",
-                    "Amount": -1,
-                    "Conditions": [1]
+                    "Function": "consume_amount",
+                    "Parameters": ["Wood", 1],
+                    "Conditions": ["Has Wood"]
                 },
-				{
-					"Commodity": "Wheat",
-					"Amount": 2,
-                    "Conditions": [1]
-				},
-				{
-					"Commodity": "Wheat",
-					"Amount": 2,
-					"Conditions": [1, 2]
-				},
-				{
-					"Commodity": "Tools",
-					"Amount": -1,
-					"Conditions": [1, 2, 3]
-				}
+                {
+                    "Function": "produce_amount",
+                    "Parameters": ["Wheat", 2],
+                    "Conditions": ["Has Wood"]
+                },
+                {
+                    "Function": "produce_amount",
+                    "Parameters": ["Wheat", 2],
+                    "Conditions": ["Has Wood", "Has Tools"]
+                },
+                {
+                    "Function": "consume_amount",
+                    "Parameters": ["Tools", 1],
+                    "Conditions": ["Has Wood", "Has Tools", "10% Chance"]
+                }
 			],
 			"Commodities": [
 				{
@@ -95,41 +95,41 @@
 			"Name": "Miner",
             "Conditions": [
                 {
-                    "ID": 1,
+                    "ID": "Has Wheat",
                     "Function": "has_commodity",
                     "Parameters": ["Wheat"]
                 },
                 {
-                    "ID": 2,
+                    "ID": "Has Tools",
                     "Function": "has_commodity",
                     "Parameters": ["Tools"]
                 },
                 {
-                    "ID": 3,
+                    "ID": "10% Chance",
                     "Function": "chance",
                     "Parameters": [0.1]
                 }
             ],
             "Productions": [
                 {
-                    "Commodity": "Wheat",
-                    "Amount": -1,
-                    "Conditions": [1]
+                    "Function": "consume_amount",
+                    "Parameters": ["Wheat", 1],
+                    "Conditions": ["Has Wheat"]
                 },
                 {
-                    "Commodity": "Ore",
-                    "Amount": 2,
-                    "Conditions": [1]
+                    "Function": "produce_amount",
+                    "Parameters": ["Ore", 2],
+                    "Conditions": ["Has Wheat"]
                 },
                 {
-                    "Commodity": "Ore",
-                    "Amount": 2,
-                    "Conditions": [1, 2]
+                    "Function": "produce_amount",
+                    "Parameters": ["Ore", 2],
+                    "Conditions": ["Has Wheat", "Has Tools"]
                 },
                 {
-                    "Commodity": "Tools",
-                    "Amount": -1,
-                    "Conditions": [1, 2, 3]
+                    "Function": "consume_amount",
+                    "Parameters": ["Tools", 1],
+                    "Conditions": ["Has Wheat", "Has Tools", "10% Chance"]
                 }
             ],
             "Commodities": [
@@ -169,17 +169,17 @@
 			"Name": "Refiner",
             "Conditions": [
                 {
-                    "ID": 1,
+                    "ID": "Has Wheat",
                     "Function": "has_commodity",
                     "Parameters": ["Wheat"]
                 },
                 {
-                    "ID": 2,
+                    "ID": "Has Tools",
                     "Function": "has_commodity",
                     "Parameters": ["Tools"]
                 },
                 {
-                    "ID": 3,
+                    "ID": "10% Chance",
                     "Function": "chance",
                     "Parameters": [0.1]
                 }
@@ -198,26 +198,19 @@
             ],
             "Productions": [
                 {
-                    "Commodity": "Wheat",
-                    "Amount": -1,
-                    "Conditions": [1]
+                    "Function": "consume_amount",
+                    "Parameters": ["Wheat", 1],
+                    "Conditions": ["Has Wheat"]
                 },
                 {
-                    "Commodity": "Metal",
-                    "Amount": "Variable",
-                    "Variable": 1,
-                    "Conditions": [1, 2]
+                    "Function": "convert_commodity",
+                    "Parameters": ["Ore", "Metal"],
+                    "Conditions": ["Has Wheat", "Has Tools"]
                 },
                 {
-                    "Commodity": "Ore",
-                    "Amount": "Variable",
-                    "Variable": 2,
-                    "Conditions": [1, 2]
-                },
-                {
-                    "Commodity": "Tools",
-                    "Amount": -1,
-                    "Conditions": [1, 2, 3]
+                    "Function": "consume_amount",
+                    "Parameters": ["Tools", 1],
+                    "Conditions": ["Has Wheat", "Has Tools", "10% Chance"]
                 }
             ],
             "Commodities": [
@@ -257,7 +250,7 @@
 			"Name": "Blacksmith",
             "Conditions": [
                 {
-                    "ID": 1,
+                    "ID": "Has Wheat",
                     "Function": "has_commodity",
                     "Parameters": ["Wheat"]
                 }
@@ -276,21 +269,14 @@
             ],
             "Productions": [
                 {
-                    "Commodity": "Wheat",
-                    "Amount": -1,
-                    "Conditions": [1]
+                    "Function": "consume_amount",
+                    "Parameters": ["Wheat", 1],
+                    "Conditions": ["Has Wheat"]
                 },
                 {
-                    "Commodity": "Tools",
-                    "Amount": "Variable",
-                    "Variable": 1,
-                    "Conditions": [1]
-                },
-                {
-                    "Commodity": "Metal",
-                    "Amount": "Variable",
-                    "Variable": 2,
-                    "Conditions": [1]
+                    "Function": "convert_commodity",
+                    "Parameters": ["Metal", "Tools"],
+                    "Conditions": ["Has Wheat"]
                 }
             ],
             "Commodities": [
@@ -330,41 +316,41 @@
 			"Name": "Woodcutter",
             "Conditions": [
                 {
-                    "ID": 1,
+                    "ID": "Has Wheat",
                     "Function": "has_commodity",
                     "Parameters": ["Wheat"]
                 },
                 {
-                    "ID": 2,
+                    "ID": "Has Tools",
                     "Function": "has_commodity",
                     "Parameters": ["Tools"]
                 },
                 {
-                    "ID": 3,
+                    "ID": "10% Chance",
                     "Function": "chance",
                     "Parameters": [0.1]
                 }
             ],
             "Productions": [
                 {
-                    "Commodity": "Wheat",
-                    "Amount": -1,
-                    "Conditions": [1]
+                    "Function": "consume_amount",
+                    "Parameters": ["Wheat", 1],
+                    "Conditions": ["Has Wheat"]
                 },
                 {
-                    "Commodity": "Wood",
-                    "Amount": 1,
-                    "Conditions": [1]
+                    "Function": "produce_amount",
+                    "Parameters": ["Wood", 1],
+                    "Conditions": ["Has Wheat"]
                 },
                 {
-                    "Commodity": "Wood",
-                    "Amount": 1,
-                    "Conditions": [1, 2]
+                    "Function": "produce_amount",
+                    "Parameters": ["Wood", 1],
+                    "Conditions": ["Has Wheat", "Has Tools"]
                 },
                 {
-                    "Commodity": "Tools",
-                    "Amount": -1,
-                    "Conditions": [1, 2, 3]
+                    "Function": "consume_amount",
+                    "Parameters": ["Tools", 1],
+                    "Conditions": ["Has Wheat", "Has Tools", "10% Chance"]
                 }
             ],
             "Commodities": [

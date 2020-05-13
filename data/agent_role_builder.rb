@@ -5,7 +5,7 @@
 require_relative 'sim_data'
 require_relative 'agent_role'
 require_relative 'variable_builder'
-require_relative 'production_rule_builder'
+require_relative 'rules/production_rule'
 require_relative 'conditions/condition'
 
 class AgentRoleBuilder
@@ -54,8 +54,7 @@ class AgentRoleBuilder
     return self if productions_hash.nil?
 
     productions_hash.each do |rule_hash|
-      rule = ProductionRuleBuilder.from_hash(rule_hash, @sim_data)
-      @role.add_production_rule(rule)
+      @role.add_production_rule(ProductionRule.from_hash(rule_hash))
     end
 
     self
