@@ -4,8 +4,8 @@
 
 require_relative 'sim_data'
 require_relative 'agent_role'
-require_relative 'rules/production_rule'
-require_relative 'conditions/condition'
+require_relative 'production_rule'
+require_relative 'condition'
 
 class AgentRoleBuilder
   def self.from_hash(agent_hash, sim_data)
