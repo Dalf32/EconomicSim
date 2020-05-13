@@ -15,10 +15,15 @@ class AgentSpawner
   end
 
   def spawn_profitable_agents(num_agents)
-    roles = profitable_roles
-    roles = @agent_roles if roles.empty?
+    ratios = profitability_ratios
+    return spawn_agents(num_agents, @agent_roles) if ratios.empty?
 
-    spawn_agents(num_agents, roles)
+    spawned_agents = ratios.each_pair.map do |role, profitability|
+      spawn_agents((profitability * num_agents).to_i, role)
+    end.flatten
+    remainder = num_agents - spawned_agents.count
+
+    spawned_agents + spawn_agents(remainder, ratios.keys)
   end
 
   def most_profitable_role
@@ -29,27 +34,33 @@ class AgentSpawner
     @agent_roles.select { |role| @trade_tracker.profitability_of(role).positive? }
   end
 
-  def get_profitability_ratios
+  private
+
+  def profitability_ratios
     total_profitability = 0
     profitability_ratios = {}
+    roles = profitable_roles
 
-    @agent_roles.each do |agent_role|
+    roles.each do |agent_role|
       profitability = @trade_tracker.profitability_of(agent_role)
       total_profitability += profitability
       profitability_ratios[agent_role] = profitability
     end
 
-    @agent_roles.each do |agent_role|
-      next if profitability_ratios[agent_role].zero?
+    roles.each do |agent_role|
       profitability_ratios[agent_role] /= total_profitability
     end
 
-    profitability_ratios.sort_by { |_key, value| value }.reverse
+    profitability_ratios
   end
 
-  private
-
   def spawn_agents(num_agents, roles)
-    num_agents.times.map { |n| roles[n % roles.count].new_agent(@market, *@agent_params) }
+    return num_agents.times.map { spawn_agent(roles) } if roles.is_a?(AgentRole)
+
+    num_agents.times.map { |n| spawn_agent(roles[n % roles.count]) }
+  end
+
+  def spawn_agent(role)
+    role.new_agent(@market, *@agent_params)
   end
 end
