@@ -182,6 +182,11 @@
                     "ID": "10% Chance",
                     "Function": "chance",
                     "Parameters": [0.1]
+                },
+                {
+                    "ID": "Has no Tools",
+                    "Function": "has_no_commodity",
+                    "Parameters": ["Tools"]
                 }
             ],
             "Productions": [
@@ -199,6 +204,11 @@
                     "Function": "consume_amount",
                     "Parameters": ["Tools", 1],
                     "Conditions": ["Has Wheat", "Has Tools", "10% Chance"]
+                },
+                {
+                    "Function": "convert_commodity_capped",
+                    "Parameters": ["Ore", "Metal", 2],
+                    "Conditions": ["Has Wheat", "Has no Tools"]
                 }
             ],
             "Commodities": [

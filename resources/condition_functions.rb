@@ -7,6 +7,10 @@ module ConditionFunctions
     inventory.stock_of?(commodity)
   end
 
+  def has_no_commodity(commodity)
+    !inventory.stock_of?(commodity)
+  end
+
   def chance(chance)
     rand < chance
   end
