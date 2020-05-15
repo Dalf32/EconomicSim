@@ -22,7 +22,7 @@ class ProductionRule
     @condition_ids.all? { |id| condition_vals[id] }
   end
 
-  def produce(agent, condition_vals, _variable_vals)
+  def produce(agent, condition_vals)
     return unless should_produce?(condition_vals)
 
     @function.bind(agent).call(*@parameters)

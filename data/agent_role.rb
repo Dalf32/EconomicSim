@@ -15,7 +15,6 @@ class AgentRole
     @name = name
     @inventory = Inventory.new(commodities)
     @conditions = {}
-    @variables = {}
     @production_rules = []
     @trade_prefs = Hash.new { |hash, key| hash[key] = 0 }
   end
@@ -26,10 +25,6 @@ class AgentRole
 
   def add_condition(condition)
     @conditions[condition.id] = condition
-  end
-
-  def add_variable(variable)
-    @variables[variable.id] = variable
   end
 
   def set_commodity_prefs(commodity, ideal_stock, buys, sells)
@@ -44,9 +39,8 @@ class AgentRole
 
   def perform_production(agent)
     condition_vals = evaluate_conditions(agent)
-    variable_vals = evaluate_variables(agent)
 
-    @production_rules.each { |rule| rule.produce(agent, condition_vals, variable_vals) }
+    @production_rules.each { |rule| rule.produce(agent, condition_vals) }
   end
 
   def buys?(commodity)
@@ -69,17 +63,9 @@ class AgentRole
     @conditions[id].evaluate(agent)
   end
 
-  def evaluate_variable(agent, id)
-    @variables[id].evaluate(agent)
-  end
-
   private
 
   def evaluate_conditions(agent)
     @conditions.map { |id, cond| [id, cond.evaluate(agent)] }.to_h
-  end
-
-  def evaluate_variables(agent)
-    @variables.map { |id, var| [id, var.evaluate(agent)] }.to_h
   end
 end
