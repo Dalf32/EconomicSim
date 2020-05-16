@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # economic_agent.rb
 #
 # Author::  Kyle Mullins
@@ -6,9 +8,17 @@ require_relative '../utilities/extensions'
 require_relative 'price_belief'
 require_relative 'inventory'
 
+# Represents an Agent that produces, consumes, buys, and sells Commodities in
+# the Market
 class EconomicAgent
   attr_reader :role, :market, :funds, :inventory
 
+  # Creates a new EconomicAgent
+  #
+  # @param role [AgentRole] This Agent's role
+  # @param market [Market] The Market in which this Agent trades
+  # @param starting_funds [Numeric] Amount of money the Agent starts out with
+  # @param starting_inv [Inventory] Agent's starting inventory
   def initialize(role, market, starting_funds, starting_inv)
     @role = role
     @market = market
@@ -21,14 +31,23 @@ class EconomicAgent
     @outstanding_bids = Hash.new { |hash, key| hash[key] = nil }
   end
 
+  # Whether or not this Agent has money left
+  #
+  # @return [Boolean]
   def bankrupt?
     @funds.negative?
   end
 
+  # Executes Production Rules if their Conditions are met
   def perform_production
     @role.perform_production(self)
   end
 
+  # Adjusts Agent's funds, inventory, and beliefs based on a completed trade
+  #
+  # @param commodity [Commodity] The Commodity that was traded
+  # @param amount [Numeric] The amount that was traded
+  # @param price [Numeric] The price per item traded
   def trade_results(commodity, amount, price)
     @observed_prices[commodity] << price
 
@@ -79,6 +98,7 @@ class EconomicAgent
     @funds -= amount * price
   end
 
+  # Updates Agent's beliefs based on the failed trades
   def update_failed_trades
     @market.commodities.each do |commodity|
       if !@outstanding_asks[commodity].nil? && !@outstanding_asks[commodity].fulfilled?
@@ -92,6 +112,7 @@ class EconomicAgent
     end
   end
 
+  # Creates and posts Asks for any saleable Commodities in surplus
   def generate_asks
     @role.commodities_to_sell.each do |commodity|
       if @inventory.surplus_of?(commodity)
@@ -102,6 +123,7 @@ class EconomicAgent
     end
   end
 
+  # Creates and posts Bids for any purchasable Commodities in shortage
   def generate_bids
     @role.commodities_to_buy.each do |commodity|
       if @inventory.shortage_of?(commodity)

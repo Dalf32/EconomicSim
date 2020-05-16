@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # agent_role_builder.rb
 #
 # Author::  Kyle Mullins
@@ -7,7 +9,14 @@ require_relative 'agent_role'
 require_relative 'production_rule'
 require_relative 'condition'
 
+# Builds AgentRoles
 class AgentRoleBuilder
+
+  # Builds a role from the data in the hash
+  #
+  # @param agent_hash [Hash] Hash holding all of the role data
+  # @param sim_data [SimData] Common store of this simulation's data
+  # @return [AgentRole] Newly-constructed role
   def self.from_hash(agent_hash, sim_data)
     name = agent_hash['Name']
 
@@ -18,15 +27,26 @@ class AgentRoleBuilder
                     .build
   end
 
+  # Creates a new AgentRole
+  #
+  # @param name [String] Name of this role
+  # @param sim_data [SimData] Common store of this simulation's data
   def initialize(name, sim_data)
     @sim_data = sim_data
     @role = AgentRole.new(name, @sim_data.commodities)
   end
 
+  # Returns the constructed AgentRole
+  #
+  # @return [AgentRole]
   def build
     @role
   end
 
+  # Builds and adds Conditions from the given hash to the role
+  #
+  # @param conditions_hash [Hash] Specification of this role's Conditions
+  # @return [AgentRoleBuilder] self
   def conditions(conditions_hash)
     return self if conditions_hash.nil?
 
@@ -37,6 +57,10 @@ class AgentRoleBuilder
     self
   end
 
+  # Builds and adds Production Rules from the given hash to the role
+  #
+  # @param productions_hash [Hash] Specification of this role's Production Rules
+  # @return [AgentRoleBuilder] self
   def productions(productions_hash)
     return self if productions_hash.nil?
 
@@ -47,6 +71,10 @@ class AgentRoleBuilder
     self
   end
 
+  # Sets up this role's Commodity preferences from the given hash
+  #
+  # @param commodities_hash [Hash] Specification of this role's Commodity preferences
+  # @return [AgentRoleBuilder] self
   def commodities(commodities_hash)
     return self if commodities_hash.nil?
 
