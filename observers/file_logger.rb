@@ -1,10 +1,15 @@
+# frozen_string_literal: true
+
 # file_logger.rb
 #
 # Author::  Kyle Mullins
 
 require_relative '../events/event_reactor'
 
+# Logs all trades to a file
 class FileLogger
+
+  # Creates a new FileLogger
   def initialize
     @current_round = 1
 
@@ -15,11 +20,16 @@ class FileLogger
     end
   end
 
+  # Registers for the needed events with the reactor
   def register_events
-    EventReactor::sub(:trade_cleared, &method(:log_trade_cleared))
-    EventReactor::sub(:round_change, &method(:log_round_change))
+    EventReactor.sub(:trade_cleared, &method(:log_trade_cleared))
+    EventReactor.sub(:round_change, &method(:log_round_change))
   end
 
+  # Logs to the file that a round ended
+  #
+  # @param _event [RoundChangeEvent] Event fired when a round of the simulation
+  # ends
   def log_round_change(_event)
     round_change_str = "Round #{@current_round} start\n"
 
@@ -29,6 +39,9 @@ class FileLogger
     @current_round += 1
   end
 
+  # Logs to the file that a trade has cleared in the market
+  #
+  # @param event [TradeClearedEvent] Event fired when a trade is completed
   def log_trade_cleared(event)
     trade = event.cleared_trade
 

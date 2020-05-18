@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # trade_tracker.rb
 #
 # Author::  Kyle Mullins
@@ -6,9 +8,11 @@ require_relative '../utilities/tracked_array'
 require_relative '../utilities/tracked_ring_buffer'
 require_relative '../events/event_reactor'
 
+# Stores historical data regarding Commodity prices and Agent profits
 class TradeTracker
   attr_reader :history_window_size
 
+  # Creates a new TradeTracker
   def initialize
     @last_id = 0
     @current_round = 0
@@ -27,19 +31,33 @@ class TradeTracker
     @trades_by_seller_type = Hash.new { |hash, key| hash[key] = [] }
   end
 
+  # Registers for the needed events with the reactor
   def register_events
-    EventReactor::sub(:trade_cleared, &method(:trade_cleared))
-    EventReactor::sub(:round_change, &method(:change_round))
+    EventReactor.sub(:trade_cleared, &method(:trade_cleared))
+    EventReactor.sub(:round_change, &method(:change_round))
   end
 
+  # Average sale price of a Commodity
+  #
+  # @param commodity [Commodity] The Commodity in question
+  # @return [Numeric] Average price of the Commodity over the last several rounds
   def price_of(commodity)
     @commodity_prices[commodity].avg
   end
 
+  # Average profits of a type of Agent
+  # @param agent_type [AgentRole] The type of Agent in question
+  # @return [Numeric] Average profits of Agents of the role over the last
+  # several rounds
   def profitability_of(agent_type)
     @agent_profits[agent_type].avg
   end
 
+  # When a round of the simulation ends, updates based on the data tracked
+  # during that round
+  #
+  # @param _event [RoundChangeEvent] Event fired when a round of the simulation
+  # ends
   def change_round(_event)
     @current_round += 1
 
@@ -56,6 +74,9 @@ class TradeTracker
     end
   end
 
+  # Tracks data about a cleared trade
+  #
+  # @param event [TradeClearedEvent] Event fired when a trade is completed
   def trade_cleared(event)
     trade = event.cleared_trade
     id = next_id

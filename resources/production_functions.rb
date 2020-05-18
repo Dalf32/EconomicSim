@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 # ProductionFunctions
 #
 # AUTHOR::  Kyle Mullins
 
+# Methods which modify an Agent's inventory to be used for AgentRole logic
 module ProductionFunctions
   def produce_amount(commodity, amount)
     inventory.change_stock_of(commodity, amount)
