@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # market.rb
 #
 # Author::  Kyle Mullins
@@ -8,9 +10,14 @@ require_relative '../utilities/tracked_array'
 require_relative '../events/event_reactor'
 require_relative '../events/events'
 
+# Receives all Asks and Bids from Agents and resolves them into trades
 class Market
   attr_reader :commodities, :purchase_history
 
+  # Creates a new Market
+  #
+  # @param commodities [Array<Commodities>] List of all Commodities traded
+  # @param trade_tracker [TradeTracker] Store of historical trade data
   def initialize(commodities, trade_tracker)
     @commodities = commodities
     @trade_tracker = trade_tracker
@@ -20,29 +27,48 @@ class Market
     @purchase_history = Hash.new { |h, k| h[k] = TrackedArray.new }
   end
 
+  # Records an Ask for the given Commodity
+  #
+  # @param commodity [Commodity] The Commodity to be sold
+  # @param ask [Ask] The Ask being posted
   def post_ask(commodity, ask)
-    EventReactor::pub(AskPostedEvent.new(commodity, ask))
+    EventReactor.pub(AskPostedEvent.new(commodity, ask))
     @asks[commodity] << ask
   end
 
+  # Records a Bid for the given Commodity
+  #
+  # @param commodity [Commodity] The Commodity to be bought
+  # @param bid [Bid] The Bid being posted
   def post_bid(commodity, bid)
-    EventReactor::pub(BidPostedEvent.new(commodity, bid))
+    EventReactor.pub(BidPostedEvent.new(commodity, bid))
     @bids[commodity] << bid
   end
 
+  # The last successful sale price of a Commodity
+  #
+  # @param commodity [Commodity] The Commodity in question
+  # @return [Numeric]
   def last_price_of(commodity)
     @trade_tracker.price_of(commodity)
   end
 
+  # The average sale price of a Commodity
+  #
+  # @param commodity [Commodity] The Commodity in question
+  # @return [Numeric]
   def mean_price_of(commodity)
-    @purchase_history[commodity].map { |round_history| round_history.avg }.avg
+    @purchase_history[commodity].map(&:avg).avg
   end
 
+  # Resolves offers for all Commodities posted
   def resolve_all_offers
-    EventReactor::pub(RoundChangeEvent.new)
+    EventReactor.pub(RoundChangeEvent.new)
 
     @commodities.each { |commodity| resolve_offers(commodity) }
   end
+
+  private
 
   def resolve_offers(commodity)
     purchases = TrackedArray.new
@@ -56,10 +82,10 @@ class Market
       quantity_traded = [ask.amount_remaining, bid.amount_remaining].min
       clearing_price = Math.avg(ask.ask_price, bid.bid_price)
 
-      if quantity_traded > 0
+      if quantity_traded.positive?
         cleared_trade = ClearedTrade.new(bid.buyer, ask.seller, commodity,
                                          quantity_traded, clearing_price)
-        EventReactor::pub(TradeClearedEvent.new(cleared_trade))
+        EventReactor.pub(TradeClearedEvent.new(cleared_trade))
 
         purchases << clearing_price
 

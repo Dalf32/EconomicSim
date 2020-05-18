@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # economic_sim.rb
 #
 # Author::  Kyle Mullins
