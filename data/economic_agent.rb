@@ -56,7 +56,7 @@ class EconomicAgent
     historical_mean = @market.last_price_of(commodity)
     delta_to_mean = historical_mean - believed_mean
     significant_margin = price * 0.25
-    stock_ratio = @inventory.stock_of(commodity) / @inventory.ideal_stock_of(commodity)
+    stock_ratio = @inventory.stock_of(commodity) / @inventory.ideal_stock_of(commodity).to_f
 
     if delta_to_mean.abs > significant_margin
       @beliefs[commodity].translate(delta_to_mean / 2)
@@ -146,24 +146,23 @@ class EconomicAgent
   end
 
   def create_ask(commodity, lower_limit)
-    if @inventory.stock_of?(commodity)
-      ask_price = @beliefs[commodity].choose_price
-      proposed_amount = determine_ask_amount(commodity)
-      offer_amount = [proposed_amount, lower_limit].max
-      # offer_amount = Math.min(offer_amount, @inventory.stock_of(commodity))
+    return unless @inventory.stock_of?(commodity)
 
-      ask = Ask.new(self, ask_price, offer_amount)
+    ask_price = @beliefs[commodity].choose_price
+    proposed_amount = determine_ask_amount(commodity)
+    offer_amount = [proposed_amount, lower_limit].max
+    offer_amount = [offer_amount, @inventory.stock_of(commodity)].min
 
-      @market.post_ask(commodity, ask)
-      @outstanding_asks[commodity] = ask
-    end
+    ask = Ask.new(self, ask_price, offer_amount)
+
+    @market.post_ask(commodity, ask)
+    @outstanding_asks[commodity] = ask
   end
 
   def determine_ask_amount(commodity)
     price_belief = @beliefs[commodity]
     last_price = market.mean_price_of(commodity)
-
-    last_price = price_belief.mean if last_price.nil?
+    last_price = price_belief.mean if last_price.zero?
 
     favorability = (last_price - price_belief.min) / price_belief.span.to_f
     ask_amt = favorability * @inventory.stock_of(commodity)
@@ -173,13 +172,10 @@ class EconomicAgent
   def determine_bid_amount(commodity)
     price_belief = @beliefs[commodity]
     last_price = market.mean_price_of(commodity)
-
-    last_price = price_belief.mean if last_price.nil?
+    last_price = price_belief.mean if last_price.zero?
 
     favorability = (last_price - price_belief.min) / price_belief.span.to_f
-    # bid_amt = (price_belief.max - favorability) * (@inventory_limit - @inventory[commodity])
-    bid_amt = favorability * @inventory.shortage_of(commodity)
-    raise 'NAN!' if bid_amt.nan?
+    bid_amt = (1 - favorability) * @inventory.shortage_of(commodity)
     [bid_amt.to_i, 1].max
   end
 end

@@ -100,23 +100,11 @@ class Market
       @bids[commodity].shift if bid.fulfilled?
     end
 
-    unless @bids[commodity].empty?
-      @bids[commodity].each do |bid|
-        # bid.buyer.bid_results(commodity, 0, 0, false)
-        bid.buyer.update_failed_trades
-      end
+    @bids[commodity].each { |b| b.buyer.update_failed_trades }
+    @bids[commodity].clear
 
-      @bids[commodity].clear
-    end
-
-    unless @asks[commodity].empty?
-      @asks[commodity].each do |ask|
-        # ask.seller.ask_results(commodity, 0, 0, false)
-        ask.seller.update_failed_trades
-      end
-
-      @asks[commodity].clear
-    end
+    @asks[commodity].each { |a| a.seller.update_failed_trades }
+    @asks[commodity].clear
 
     @purchase_history[commodity] << purchases
   end
